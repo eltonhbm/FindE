@@ -19,23 +19,29 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="previsaoDoTempo">Previsão</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="menuEstagiario" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Estagiário
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="menuEstagiario">
+                                <li><a class="dropdown-item" href="">Cadastro</a></li>
+                                <li><a class="dropdown-item" href="">Consulta</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="menuEmpresa" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Empresa
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="menuEmpresa">
+                                <li><a class="dropdown-item" href="">Cadastro</a></li>
+                                <li><a class="dropdown-item" href="">Consulta</a></li>
+                            </ul>
                         </li>
                         <li>
                             <a class="nav-link" href="cep">Cep</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                APIs
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="chuckNorris">Chuck Norris</a></li>
-                                <li><a class="dropdown-item" href="kenyeWest">Kenye West</a></li>
-                            </ul>
-                        </li>
                         <li>
-                            <a class="nav-link" href="/sobre">Sobre</a>
+                            <a class="nav-link" href="sobre">Sobre</a>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
