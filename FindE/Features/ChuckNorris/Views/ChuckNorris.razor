@@ -1,0 +1,32 @@
+﻿@page "/chuckNorris"
+@using FindE.Features.ChuckNorris.Models
+@inject FindE.Features.ChuckNorris.Services.ChuckNorrisService chuckNorrisService
+@inject IToastService toastService
+
+<PageTitle>Chuck Norris</PageTitle>
+
+<button class="btn btn-info" @onclick="BuscarPiada">Buscar piada</button>
+<br />
+<br />
+@joke.Piada
+
+@code {
+    Joke joke { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        joke = new Joke();
+    }
+
+    private async Task BuscarPiada()
+    {
+        try
+        {
+            joke = await chuckNorrisService.RetornarPiada();
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message, "Erro ao buscar piada do Chuck Norris");
+        }
+    }
+}

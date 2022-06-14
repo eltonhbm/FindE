@@ -1,0 +1,23 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>FindE</PageTitle>
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <BlazoredToasts Timeout="3"
+                        ShowProgressBar="true"
+                        Position="Blazored.Toast.Configuration.ToastPosition.BottomRight" />
+
+        <div class="top-row px-4">
+            <a href="/sobre">Sobre</a>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
