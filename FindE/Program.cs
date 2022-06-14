@@ -2,6 +2,7 @@ using Blazored.Toast;
 using FindE.Features.Cep.Services;
 using FindE.Features.ChuckNorris.Services;
 using FindE.Features.PrevisaoDoTempo.Services;
+using FindE.Features.KenyeWest.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddBlazoredToast();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<CepService>();
 builder.Services.AddSingleton<ChuckNorrisService>();
+builder.Services.AddSingleton<CitacaoService>();
 
 var app = builder.Build();
 
