@@ -1,0 +1,41 @@
+﻿@page "/CadastroEstagiario"
+@using FindE.Features.Estagiario.Models
+@inject IToastService toastservice
+
+<PageTitle>Cadastro de Estágiarios</PageTitle>
+
+<form class="row g-3">
+    <div class="col-md-6">
+        <label for="nome" class="form-label">Nome</label>
+        <input @bind="estagiario.Nome" type="text" class="form-control" id="nome">
+    </div>
+    <div class="col-md-6">
+        <label for="email" class="form-label">E-mail</label>
+        <input @bind="estagiario.Email" type="email" class="form-control" id="email">
+    </div>
+    <div class="col-4">
+        <label for="WhatsApp" class="form-label">WhatsApp</label>
+        <input @bind="estagiario.WhatsApp" type="tel" class="form-control" id="WhatsApp">
+    </div>
+    <div class="col-md-4">
+        <label for="datadeNascimento" class="form-label">Data de Nascimento</label>
+        <input @bind="estagiario.DataDeNascimento" type="date" class="form-control" id="datadenascimento">
+    </div>
+    <div class="col-md-4">
+        <label for="idade" class="form-label">Idade</label>
+        <div class="form-control" id="idade">@estagiario.Idade anos</div>
+    </div>
+    <div class="col-5">
+        <label for="curso" class="form-label">Curso</label>
+        <input @bind="estagiario.Curso" type="text" class="form-control" id="curso" />
+    </div>
+</form>
+
+@code {
+    EstagiarioModel estagiario;
+
+    protected override async Task OnInitializedAsync()
+    {
+        estagiario = new EstagiarioModel() { DataDeNascimento = DateTime.Now };
+    }
+}

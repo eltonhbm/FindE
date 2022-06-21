@@ -1,12 +1,12 @@
-﻿namespace FindE.Features.CadastroEmpresa.EmpresaModel
+﻿namespace FindE.Features.Empresa.Models
 {
-    public class CadastroEmpresa
+    public class EmpresaModel
     {
         public int IdCadastro { get; set; }   
         public string Nome { get; set; }
         public string Responsavel { get; set; }
         public string Email { get; set; }
-        public string Whattsap { get; set; } 
+        public string WhatsApp { get; set; } 
         public string FotoEmpresa  { get; set; }
     }
 }

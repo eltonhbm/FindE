@@ -1,7 +1,6 @@
 ﻿namespace FindE.Features.Estagiario.Services
 {
-    public class CadastroServices
+    public class EstagiarioService
     {
-        
     }
 }

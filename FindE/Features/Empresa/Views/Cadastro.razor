@@ -1,0 +1,44 @@
+﻿@page "/CadastroEmpresa"
+@using FindE.Features.Empresa.Models
+@inject IToastService toastservice
+
+<PageTitle>Cadastro</PageTitle>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Cadastro de Empresa</h5>
+        <br />
+        <form class="row g-3">
+            <div class="col-md-6">
+                <label for="NomeEmpresa" class="form-label">Nome da Empresa:</label>
+                <input @bind="empresa.Nome" type="text" class="form-control" id="NomeEmpresa" required>
+            </div>
+            <div class="col-md-6">
+                <label for="nomeResponsavel" class="form-label">Nome do Responsável:</label>
+                <input @bind="empresa.Responsavel" type="text" class="form-control" id="NomeResponsavel" required>
+            </div>
+            <div class="col-md-6">
+                <label for="Email" class="form-label">E-mail:</label>
+                <input @bind="empresa.Email" type="email" class="form-control" id="Email" required>
+            </div>
+            <div class="col-4">
+                <label for="WhatsApp" class="form-label">WhatsApp:</label>
+                <input @bind="empresa.WhatsApp" type="tel" class="form-control" id="WhatsApp" required>
+            </div>
+            <div class="mb-3">
+                <label for="FotoEmpresa" class="form-label">Coloque a foto da sua empresa:</label>
+                <input @bind="empresa.FotoEmpresa" type="file" class="form-control" aria-label="FotoEmpresa">
+                <div class="invalid-feedback">Tipo de arquivo inválido</div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@code {
+    EmpresaModel empresa;
+
+    protected override async Task OnInitializedAsync()
+    {
+        empresa = new EmpresaModel();
+    }
+}
