@@ -1,0 +1,92 @@
+﻿@page "/CadastroEstagiario"
+@using FindE.Features.Estagiario.Models
+@inject FindE.Features.Cep.Services.CepService cepService
+@using FindE.Features.Cep.Models
+@inject IToastService toastservice
+
+<PageTitle>Cadastro de Estágiarios</PageTitle>
+
+<form class="row g-3">
+    <div class="col-md-6">
+        <label for="nome" class="form-label">Nome</label>
+        <input type="text" class="form-control" id="nome">
+    </div>
+    <div class="col-md-6">
+        <label for="email" class="form-label">E-mail</label>
+        <input type="email" class="form-control" id="email">
+    </div>
+    <div class="col-4">
+        <label for="whattsapp" class="form-label">Whattsapp</label>
+        <input type="tel" class="form-control" id="whattsapp">
+    </div>
+    <div class="col-md-4">
+        <label for="datadeNascimento" class="form-label">Data de Nascimento</label>
+        <input type="date" class="form-control" id="datadenascimento">
+    </div>
+    <div class="col-5">
+        <label for="curso" class="form-label">Curso</label>
+        <input type="text" class="form-control" id="curso" />
+    </div>
+
+    <div class="col-10">
+        <input @bind="endereco.Cep" autofocus type="text" class="form-control" id="txtCep" placeholder="Informe um cep">
+    </div>
+    <div class="col-md-2">
+        <button type="button" @onclick="BuscarEnderecoPorCep" class="form-control btn-primary">Buscar</button>
+    </div>
+    <div class="col-12">
+        <label for="txtLogradouro" class="form-label">Logradouro</label>
+        <input @bind="endereco.Logradouro" type="text" class="form-control" id="txtLogradouro">
+    </div>
+    <div class="col-6">
+        <label for="txtBairro" class="form-label">Bairro</label>
+        <input @bind="endereco.Bairro" type="text" class="form-control" id="txtBairro">
+    </div>
+    <div class="col-6">
+        <label for="txtComplemento" class="form-label">Complemento</label>
+        <input @bind="endereco.Complemento" type="text" class="form-control" id="txtComplemento">
+    </div>
+    <div class="col-md-8">
+        <label for="txtCidade" class="form-label">Cidade</label>
+        <input @bind="endereco.Localidade" type="text" class="form-control" id="txtCidade">
+    </div>
+    <div class="col-md-2">
+        <label for="txtUf" class="form-label">UF</label>
+        <input @bind="endereco.Uf" type="text" class="form-control" id="txtUf">
+    </div>
+    <div class="col-md-2">
+        <label for="txtDdd" class="form-label">DDD</label>
+        <input @bind="endereco.Ddd" type="text" class="form-control" id="txtDdd">
+    </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Cadastre-se</button>
+    </div>
+</form>
+<a href="cep" @onclick="OnInitializedAsync" class="card-link">Limpar</a>
+
+
+
+
+
+
+
+@code {
+    Endereco endereco { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        endereco = new Endereco();
+    }
+
+    private async Task BuscarEnderecoPorCep()
+    {
+        try
+        {
+            endereco = await cepService.RetornarEndereco(endereco.Cep.Replace("-", "").Replace(".", ""));
+        }
+        catch (Exception ex)
+        {
+            toastservice.ShowError(ex.Message, "Erro ao buscar por cep");
+        }
+    }
+}
