@@ -23,10 +23,6 @@
         <label for="datadeNascimento" class="form-label">Data de Nascimento</label>
         <input type="date" class="form-control" id="datadenascimento">
     </div>
-    <div class="col-md-2">
-        <label for="idade" class="form-label">Idade</label>
-        <input type="number" class="form-control" id="idade">
-    </div>
     <div class="col-5">
         <label for="curso" class="form-label">Curso</label>
         <input type="text" class="form-control" id="curso" />
@@ -62,17 +58,11 @@
         <label for="txtDdd" class="form-label">DDD</label>
         <input @bind="endereco.Ddd" type="text" class="form-control" id="txtDdd">
     </div>
-    <div class="col-md-6">
-        <input @bind="endereco.Cep" autofocus type="text" class="form-control" id="txtCep" placeholder="Informe um cep">
-    </div>
       <div class="col-12">
         <button type="submit" class="btn btn-primary">Cadastre-se</button>
     </div>
 </form>
 <a href="cep" @onclick="OnInitializedAsync" class="card-link">Limpar</a>
-<a href="https://viacep.com.br/" target="_blank" class="card-link">Fonte</a>
-<a href="https://viacep.com.br/ws/@endereco.Cep/json" target="_blank" class="card-link">Request</a>
-
 
 
 
