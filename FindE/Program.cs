@@ -1,5 +1,6 @@
 using Blazored.Toast;
 using FindE.Features.Cep.Services;
+using FindE.Features.Conta.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddBlazoredToast();
 builder.Services.AddSingleton<CepService>();
+builder.Services.AddSingleton<ContaService>();
 
 var app = builder.Build();
 

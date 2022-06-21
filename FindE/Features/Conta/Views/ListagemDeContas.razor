@@ -1,0 +1,119 @@
+﻿@page "/ListagemDeContas"
+@using FindE.Features.Conta.Models
+@inject IToastService toastService
+@inject FindE.Features.Conta.Services.ContaService contaService
+
+@if (contas == null)
+{
+    <p><div class="spinner-border text-primary m-1" role="status"></div>Carregando contas...</p>
+}
+else
+{
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #004977;">
+            <div class="navbar-brand text-white" style="padding: 5px;">Contas</div>
+        </nav>
+        <div class="container-fluid border rounded" style="padding: 5px">
+            <div class="row">
+                <div class="col-4" style="padding-right: 2px">
+                    <input @bind=filtroConta onkeyup="if (event.keyCode == 13) document.getElementById('btnPesquisarConta').click()" type="text" class="form-control" placeholder="Usuário">
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-primary" type="button" id="btnPesquisarConta" @onclick="() => PesquisarNaListagem()">Pesquisar</button>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th style="width: 80px", valign="middle">Id</th>
+                        <th>Usuário</th>
+                        <th class="thBadgeCustom">Perfil</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var conta in contas)
+                    {
+                        <tr>
+                            <td class="align-middle">@conta.Id</td>
+                            <td class="align-middle">@conta.Usuario</td>
+                            @if ((int)conta.Perfil == 1)
+                            {
+                                <td class="tdBadgeCustom"><span class="badge bg-warning text-white">Empresa</span></td>
+                            }
+                            else if ((int)conta.Perfil == 2)
+                            {
+                                <td class="tdBadgeCustom"><span class="badge bg-success text-white">Estagiário</span></td>
+                            }
+                            else
+                            {
+                                <td class="tdBadgeCustom"><span class="badge bg-dark text-white">Administrador</span></td>
+                            }
+                            <td class="align-middle">
+                                <button type="button" class="btn btn-secondary btn-sm"
+                                data-toggle="tooltip" data-placement="left" title="Alterar conta" @onclick="() => AlterarConta(conta)">
+                                    <div class="bi bi-pencil"></div>
+                                </button>
+                                <button type="button" class="btn btn-danger btn-sm"
+                                data-toggle="tooltip" data-placement="left" title="Apagar conta" @onclick="() => ApagarConta(conta)">
+                                    <div class="bi bi-trash"></div>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <div class="hint-text">Exibindo as últimas <b>@contas.Count()</b> contas.</div>
+        </div>
+    </div>
+}
+
+@code {
+
+    IEnumerable<ContaModel> contas;
+    string filtroConta;
+
+    protected override async Task OnInitializedAsync()
+    {
+        contas = new List<ContaModel>();
+        ListarContas();
+    }
+
+    private void ListarContas()
+    {
+        try
+        {
+            contas = contaService.RetornarContas();
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message, "Erro ao buscar contas");
+        }
+    }
+
+    private void PesquisarNaListagem()
+    {
+        if (string.IsNullOrWhiteSpace(filtroConta))
+        {
+            ListarContas();
+        }
+        else
+        {
+            contas = contas.Where(p => p.Usuario.ToLower().Contains(filtroConta.ToLower())).ToList();
+        }
+    }
+
+    private void AlterarConta(ContaModel conta)
+    {
+        
+    }
+
+    private void ApagarConta(ContaModel conta)
+    {
+        
+    }
+}
