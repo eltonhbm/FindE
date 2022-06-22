@@ -1,6 +1,8 @@
 using Blazored.Toast;
+using FindE.Data;
 using FindE.Features.Cep.Services;
 using FindE.Features.Conta.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddBlazoredToast();
+builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlite("Data Source = FindE.db"));
 builder.Services.AddSingleton<CepService>();
-builder.Services.AddSingleton<ContaService>();
+builder.Services.AddScoped<ContaService>();
 
 var app = builder.Build();
 

@@ -83,11 +83,11 @@ else
         ListarContas();
     }
 
-    private void ListarContas()
+    private async void ListarContas()
     {
         try
         {
-            contas = contaService.RetornarContas();
+            contas = await contaService.ListarContas();
         }
         catch (Exception ex)
         {
