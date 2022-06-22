@@ -1,5 +1,52 @@
-﻿<h3>CadastroDaConta</h3>
+﻿@page "/CadastroDeConta"
+@using FindE.Features.Conta.Models
+@inject FindE.Features.Conta.Services.ContaService contaService
+@inject IToastService toastService
+
+<EditForm Model="@Conta">
+    <div class="form-group">
+        <label for="txtUsuario">Usuario</label>
+        <input type="text" id="txtUsuario" class="form-control" @bind="@Conta.Usuario" />
+    </div>
+    <div class="form-group">
+        <label for="txtSenha">Senha</label>
+        <input type="password" id="txtSenha" class="form-control" @bind="@Conta.Senha" />
+    </div>
+    <div class="form-group">
+        <label for="txtSenhaConfirmacao">Confirmar senha</label>
+        <input type="password" id="txtSenhaConfirmacao" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="cbxPerfil">Perfil</label>
+        <select id="cbxPerfil" class="form-control" @bind="@Conta.Perfil">
+            <option value="0">Administrador</option>
+            <option value="1">Empresa</option>
+            <option value="2">Estagiário</option>
+        </select>
+    </div>
+    <div class="text-center p-3 mb-3">
+        <button class="btn btn-info" @onclick="InserirConta"> Salvar</button>
+    </div>
+</EditForm>
 
 @code {
+    private ContaModel Conta;
 
+    protected override async Task OnInitializedAsync()
+    {
+        Conta = new ContaModel();
+    }
+
+    private async Task InserirConta()
+    {
+        try
+        {
+            await contaService.InserirConta(Conta);
+            toastService.ShowSuccess("Conta inserida com sucesso.", "Tudo ok!");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message, "Erro ao cadastrar conta");
+        }
+    }
 }

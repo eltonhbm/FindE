@@ -2,6 +2,8 @@
 @using FindE.Features.Conta.Models
 @inject IToastService toastService
 @inject FindE.Features.Conta.Services.ContaService contaService
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
 
 @if (contas == null)
 {
@@ -10,8 +12,11 @@
 else
 {
     <div>
-        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #004977;">
-            <div class="navbar-brand text-white" style="padding: 5px;">Contas</div>
+        <nav class="navbar navbar-expand-md bg-gradientsticky-top shadow-sm" style="background-color: #006666;">
+            <div class="navbar-brand text-white container-fluid" style="padding: 10px;">Contas</div>
+            <button class="navbar-toggler" @onclick="ToggleNavMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
         </nav>
         <div class="container-fluid border rounded" style="padding: 5px">
             <div class="row">
@@ -19,7 +24,10 @@ else
                     <input @bind=filtroConta onkeyup="if (event.keyCode == 13) document.getElementById('btnPesquisarConta').click()" type="text" class="form-control" placeholder="Usuário">
                 </div>
                 <div class="col-2">
-                    <button class="btn btn-primary" type="button" id="btnPesquisarConta" @onclick="() => PesquisarNaListagem()">Pesquisar</button>
+                    <button class="btn btn-outline-primary" type="button" id="btnPesquisarConta" @onclick="() => PesquisarNaListagem()">Pesquisar</button>
+                </div>
+                <div class="col-2">
+                    <button class="btn btn-success" type="button" id="btnInserirConta" @onclick="() => InserirConta()">Nova conta</button>
                 </div>
             </div>
         </div>
@@ -27,41 +35,48 @@ else
             <table class="table table-sm table-striped table-hover">
                 <thead>
                     <tr>
-                        <th style="width: 80px", valign="middle">Id</th>
+                        <th style="width: 80px" , valign="middle">Id</th>
                         <th>Usuário</th>
                         <th class="thBadgeCustom">Perfil</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var conta in contas)
+                    @if (contas.Any())
                     {
-                        <tr>
-                            <td class="align-middle">@conta.Id</td>
-                            <td class="align-middle">@conta.Usuario</td>
-                            @if ((int)conta.Perfil == 1)
-                            {
-                                <td class="tdBadgeCustom"><span class="badge bg-warning text-white">Empresa</span></td>
-                            }
-                            else if ((int)conta.Perfil == 2)
-                            {
-                                <td class="tdBadgeCustom"><span class="badge bg-success text-white">Estagiário</span></td>
-                            }
-                            else
-                            {
-                                <td class="tdBadgeCustom"><span class="badge bg-dark text-white">Administrador</span></td>
-                            }
-                            <td class="align-middle">
-                                <button type="button" class="btn btn-secondary btn-sm"
+                        @foreach (var conta in contas)
+                        {
+                            <tr>
+                                <td class="align-middle">@conta.Id</td>
+                                <td class="align-middle">@conta.Usuario</td>
+                                @if ((int)conta.Perfil == 1)
+                                {
+                                    <td class="tdBadgeCustom"><span class="badge bg-warning text-white">Empresa</span></td>
+                                }
+                                else if ((int)conta.Perfil == 2)
+                                {
+                                    <td class="tdBadgeCustom"><span class="badge bg-success text-white">Estagiário</span></td>
+                                }
+                                else
+                                {
+                                    <td class="tdBadgeCustom"><span class="badge bg-dark text-white">Administrador</span></td>
+                                }
+                                <td class="align-middle">
+                                    <button type="button" class="btn btn-primary btn-sm"
                                 data-toggle="tooltip" data-placement="left" title="Alterar conta" @onclick="() => AlterarConta(conta)">
-                                    <div class="bi bi-pencil"></div>
-                                </button>
-                                <button type="button" class="btn btn-danger btn-sm"
+                                        <div class="bi bi-pencil"></div>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm"
                                 data-toggle="tooltip" data-placement="left" title="Apagar conta" @onclick="() => ApagarConta(conta)">
-                                    <div class="bi bi-trash"></div>
-                                </button>
-                            </td>
-                        </tr>
+                                        <div class="bi bi-trash"></div>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr><td colspan="6"><strong>Nenhuma conta cadastrada.</strong></td></tr>
                     }
                 </tbody>
             </table>
@@ -74,16 +89,25 @@ else
 
 @code {
 
+    private bool _collapseNavMenu = true;
+
+    private string NavMenuCssClass => _collapseNavMenu ? "collapse navbar-collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        _collapseNavMenu = !_collapseNavMenu;
+    }
+
     IEnumerable<ContaModel> contas;
     string filtroConta;
 
     protected override async Task OnInitializedAsync()
     {
         contas = new List<ContaModel>();
-        ListarContas();
+        await ListarContas();
     }
 
-    private async void ListarContas()
+    private async Task ListarContas()
     {
         try
         {
@@ -95,11 +119,11 @@ else
         }
     }
 
-    private void PesquisarNaListagem()
+    private async void PesquisarNaListagem()
     {
         if (string.IsNullOrWhiteSpace(filtroConta))
         {
-            ListarContas();
+            await ListarContas();
         }
         else
         {
@@ -107,13 +131,26 @@ else
         }
     }
 
-    private void AlterarConta(ContaModel conta)
+    private void InserirConta()
     {
-        
+        navigationManager.NavigateTo("/CadastroDeConta");
     }
 
-    private void ApagarConta(ContaModel conta)
+    private async Task AlterarConta(ContaModel conta)
     {
-        
+        await contaService.AlterarConta(conta);
+        await ListarContas();
+    }
+
+    private async Task ApagarConta(ContaModel conta)
+    {
+        //await jsRuntime.InvokeVoidAsync("alert", "Atenção!");
+        //string prompted = await jsRuntime.InvokeAsync<string>("prompt", $"Confirme o nome do usuário para excluir ({conta.Usuario}):");
+
+        if (await jsRuntime.InvokeAsync<bool>("confirm", $"Excluir a conta do usuário {conta.Usuario}?"))
+        {
+            await contaService.ApagarConta(conta);
+            await ListarContas();
+        }
     }
 }
