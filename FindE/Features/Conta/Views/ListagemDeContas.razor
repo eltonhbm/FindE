@@ -12,33 +12,30 @@
 else
 {
     <div>
-        <nav class="navbar navbar-expand-md bg-gradientsticky-top shadow-sm" style="background-color: #006666;">
-            <div class="navbar-brand text-white container-fluid" style="padding: 10px;">Contas</div>
-            <button class="navbar-toggler" @onclick="ToggleNavMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </nav>
-        <div class="container-fluid border rounded" style="padding: 5px">
-            <div class="row">
-                <div class="col-4" style="padding-right: 2px">
+        <div class="container-fluid" style="padding: 5px">
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <h5>Contas de acesso ao sistema</h5>
+                </div>
+                <div class="col-md-2" style="padding-right: 2px">
                     <input @bind=filtroConta onkeyup="if (event.keyCode == 13) document.getElementById('btnPesquisarConta').click()" type="text" class="form-control" placeholder="Usuário">
                 </div>
-                <div class="col-2">
+                <div class="col-md-2">
                     <button class="btn btn-outline-primary" type="button" id="btnPesquisarConta" @onclick="() => PesquisarNaListagem()">Pesquisar</button>
                 </div>
-                <div class="col-2">
-                    <button class="btn btn-success" type="button" id="btnInserirConta" @onclick="() => InserirConta()">Nova conta</button>
+                <div class="col-md-2">
+                    <button class="btn btn-success float-md-end" type="button" id="btnInserirConta" @onclick="() => InserirConta()">Inserir</button>
                 </div>
             </div>
         </div>
         <div class="table-responsive">
-            <table class="table table-sm table-striped table-hover">
+            <table class="table table-responsive-sm table-striped table-hover">
                 <thead>
                     <tr>
                         <th style="width: 80px" , valign="middle">Id</th>
                         <th>Usuário</th>
                         <th class="thBadgeCustom">Perfil</th>
-                        <th>Ações</th>
+                        <th><span class="float-sm-end">Ações</span></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,49 +58,39 @@ else
                                 {
                                     <td class="tdBadgeCustom"><span class="badge bg-dark text-white">Administrador</span></td>
                                 }
-                                <td class="align-middle">
-                                    <button type="button" class="btn btn-primary btn-sm"
-                                data-toggle="tooltip" data-placement="left" title="Alterar conta" @onclick="() => AlterarConta(conta)">
-                                        <div class="bi bi-pencil"></div>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm"
-                                data-toggle="tooltip" data-placement="left" title="Apagar conta" @onclick="() => ApagarConta(conta)">
-                                        <div class="bi bi-trash"></div>
-                                    </button>
+                                <td>
+                                    <div class="float-sm-end">
+                                        <button type="button" class="btn btn-primary btn-sm" title="Alterar conta" @onclick="() => AlterarConta(conta)">
+                                            <div class="bi bi-pencil"></div>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-sm" title="Apagar conta" @onclick="() => ApagarConta(conta)">
+                                            <div class="bi bi-trash"></div>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         }
                     }
                     else
                     {
-                        <tr><td colspan="6"><strong>Nenhuma conta cadastrada.</strong></td></tr>
+                        <tr><td colspan="4"><strong>Nenhuma conta cadastrada.</strong></td></tr>
                     }
                 </tbody>
             </table>
         </div>
         <div>
-            <div class="hint-text">Exibindo as últimas <b>@contas.Count()</b> contas.</div>
+            <div class="hint-text">Exibindo <b>@contas.Count()</b> contas.</div>
         </div>
     </div>
 }
 
 @code {
 
-    private bool _collapseNavMenu = true;
-
-    private string NavMenuCssClass => _collapseNavMenu ? "collapse navbar-collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        _collapseNavMenu = !_collapseNavMenu;
-    }
-
     IEnumerable<ContaModel> contas;
     string filtroConta;
 
     protected override async Task OnInitializedAsync()
     {
-        contas = new List<ContaModel>();
         await ListarContas();
     }
 
@@ -144,13 +131,19 @@ else
 
     private async Task ApagarConta(ContaModel conta)
     {
-        //await jsRuntime.InvokeVoidAsync("alert", "Atenção!");
-        //string prompted = await jsRuntime.InvokeAsync<string>("prompt", $"Confirme o nome do usuário para excluir ({conta.Usuario}):");
-
         if (await jsRuntime.InvokeAsync<bool>("confirm", $"Excluir a conta do usuário {conta.Usuario}?"))
         {
-            await contaService.ApagarConta(conta);
-            await ListarContas();
+            string resposta = await jsRuntime.InvokeAsync<string>("prompt", $"Confirme o nome do usuário para excluir ({conta.Usuario}):");
+
+            if (conta.Usuario.Equals(resposta))
+            {
+                await contaService.ApagarConta(conta);
+                await ListarContas();
+            }
+            else
+            {
+                await jsRuntime.InvokeVoidAsync("alert", "Usuário informado não coincide com o usuário da conta para ser excluído.");
+            }
         }
     }
 }

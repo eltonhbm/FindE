@@ -1,31 +1,37 @@
 ﻿@page "/CadastroDeConta"
 @using FindE.Features.Conta.Models
 @inject FindE.Features.Conta.Services.ContaService contaService
+@inject NavigationManager navigationManager
 @inject IToastService toastService
 
-<EditForm Model="@Conta">
+<h5 style="padding-bottom: 10px;">Cadastro de conta</h5>
+<EditForm Model="@Conta" style="max-width: 250px;" class="row g-2" OnValidSubmit="InserirConta">
     <div class="form-group">
         <label for="txtUsuario">Usuario</label>
-        <input type="text" id="txtUsuario" class="form-control" @bind="@Conta.Usuario" />
+        <input type="text" id="txtUsuario" class="form-control" @bind="@Conta.Usuario" required />
     </div>
     <div class="form-group">
         <label for="txtSenha">Senha</label>
-        <input type="password" id="txtSenha" class="form-control" @bind="@Conta.Senha" />
+        <input type="password" id="txtSenha" class="form-control" @bind="@Conta.Senha" required />
     </div>
     <div class="form-group">
         <label for="txtSenhaConfirmacao">Confirmar senha</label>
-        <input type="password" id="txtSenhaConfirmacao" class="form-control" />
+        <input type="password" id="txtSenhaConfirmacao" class="form-control" required />
     </div>
     <div class="form-group">
         <label for="cbxPerfil">Perfil</label>
-        <select id="cbxPerfil" class="form-control" @bind="@Conta.Perfil">
-            <option value="0">Administrador</option>
-            <option value="1">Empresa</option>
-            <option value="2">Estagiário</option>
-        </select>
+        <InputSelect id="cbxPerfil" class="form-select" @bind-Value="@Conta.Perfil">
+            @foreach (var perfil in Enum.GetValues(typeof(PerfilEnum)))
+            {
+                <option value="@perfil">@perfil</option>
+            }
+        </InputSelect>
     </div>
-    <div class="text-center p-3 mb-3">
-        <button class="btn btn-info" @onclick="InserirConta"> Salvar</button>
+    <div>
+        <div style="padding-top: 8px;" class="float-end">
+            <button class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
     </div>
 </EditForm>
 
@@ -43,10 +49,16 @@
         {
             await contaService.InserirConta(Conta);
             toastService.ShowSuccess("Conta inserida com sucesso.", "Tudo ok!");
+            navigationManager.NavigateTo("/ListagemDeContas");
         }
         catch (Exception ex)
         {
             toastService.ShowError(ex.Message, "Erro ao cadastrar conta");
         }
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/ListagemDeContas");
     }
 }
