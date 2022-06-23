@@ -1,4 +1,27 @@
-﻿<h3>Login</h3>
+﻿@page "/login"
+
+<div class="wrapper">
+    <div class="logo">
+        <img src="/logo_gold.png" alt="">
+    </div>
+    <div class="text-center mt-3 name">
+        FindE
+    </div>
+    <form class="p-2 mt-3">
+        <div class="form-field d-flex align-items-center">
+            <span class="far fa-user"></span>
+            <input type="text" name="userName" id="userName" placeholder="Usuário">
+        </div>
+        <div class="form-field d-flex align-items-center">
+            <span class="fas fa-key"></span>
+            <input type="password" name="password" id="pwd" placeholder="Senha">
+        </div>
+        <button class="btn mt-3">Entrar</button>
+    </form>
+    <div class="text-center fs-6">
+        <a href="#">Esqueceu a senha?</a> ou <a href="CadatroDeConta">Cadastrar-se</a>
+    </div>
+</div>
 
 @code {
 

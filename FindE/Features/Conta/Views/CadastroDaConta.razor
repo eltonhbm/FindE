@@ -36,12 +36,7 @@
 </EditForm>
 
 @code {
-    private ContaModel Conta;
-
-    protected override async Task OnInitializedAsync()
-    {
-        Conta = new ContaModel();
-    }
+    private ContaModel Conta = new ContaModel();
 
     private async Task InserirConta()
     {
