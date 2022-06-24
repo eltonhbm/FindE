@@ -1,7 +1,7 @@
 ﻿@page "/ListagemDeEducadores"
-@using FindE.Features.Conta.Models
+@using FindE.Features.Educador.Models
 @inject IToastService toastService
-@inject FindE.Features.Conta.Services.ContaService contaService
+@inject FindE.Features.Educador.Services.EducadorService educadorService
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRuntime
 
@@ -9,16 +9,16 @@
     <div class="container-fluid">
         <div class="row g-2">
             <div class="col-md-4">
-                <h4>Contas de acesso ao sistema</h4>
+                <h4>Educadores cadastrados</h4>
             </div>
             <div class="col-md-4">
-                <input @bind=filtroConta onkeyup="if (event.keyCode == 13) document.getElementById('btnPesquisarConta').click()" type="text" class="form-control" placeholder="Usuário">
+                <input @bind=filtroEducador onkeyup="if (event.keyCode == 13) document.getElementById('btnPesquisarEducador').click()" type="text" class="form-control" placeholder="Nome">
             </div>
             <div class="col-md-2">
-                <button class="btn btn-outline-primary" type="button" id="btnPesquisarConta" @onclick="() => PesquisarNaListagem()">Pesquisar</button>
+                <button class="btn btn-outline-primary" type="button" id="btnPesquisarEducador" @onclick="() => PesquisarNaListagem()">Pesquisar</button>
             </div>
             <div class="col-md-2">
-                <button class="btn btn-success float-md-end" type="button" id="btnInserirConta" @onclick="() => InserirConta()">Inserir</button>
+                <button class="btn btn-success float-md-end" type="button" @onclick="() => InserirEducador()">Inserir</button>
             </div>
         </div>
     </div>
@@ -27,37 +27,26 @@
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Usuário</th>
-                    <th class="thBadgeCustom">Perfil</th>
+                    <th>Nome</th>
+                    <th>Mini bio</th>
                     <th><span class="float-sm-end">Ações</span></th>
                 </tr>
             </thead>
             <tbody>
-                @if (contas.Any())
+                @if (educadores.Any())
                 {
-                    @foreach (var conta in contas)
+                    @foreach (var educador in educadores)
                     {
                         <tr>
-                            <td class="align-middle">@conta.Id</td>
-                            <td class="align-middle">@conta.Usuario</td>
-                            @if ((int)conta.Perfil == 1)
-                            {
-                                <td class="tdBadgeCustom"><span class="badge bg-warning text-white">Empresa</span></td>
-                            }
-                            else if ((int)conta.Perfil == 2)
-                            {
-                                <td class="tdBadgeCustom"><span class="badge bg-success text-white">Estagiário</span></td>
-                            }
-                            else
-                            {
-                                <td class="tdBadgeCustom"><span class="badge bg-dark text-white">Administrador</span></td>
-                            }
+                            <td class="align-middle">@educador.Id</td>
+                            <td class="align-middle">@educador.Nome</td>
+                            <td>@educador.MiniBio</td>
                             <td>
                                 <div class="float-sm-end">
-                                    <button type="button" class="btn btn-primary btn-sm" title="Alterar conta" @onclick="() => AlterarConta(conta.Id)">
+                                    <button type="button" class="btn btn-primary btn-sm" title="Alterar educador" @onclick="() => AlterarEducador(educador.Id)">
                                         <div class="bi bi-pencil"></div>
                                     </button>
-                                    <button type="button" class="btn btn-danger btn-sm" title="Apagar conta" @onclick="() => ApagarConta(conta)">
+                                    <button type="button" class="btn btn-danger btn-sm" title="Apagar educador" @onclick="() => ApagarEducador(educador)">
                                         <div class="bi bi-trash"></div>
                                     </button>
                                 </div>
@@ -67,74 +56,74 @@
                 }
                 else
                 {
-                    <tr><td colspan="4"><strong>Nenhuma conta cadastrada.</strong></td></tr>
+                    <tr><td colspan="4"><strong>Nenhum educador cadastrado.</strong></td></tr>
                 }
             </tbody>
         </table>
     </div>
     <div>
-        <div class="hint-text">Exibindo <b>@contas.Count()</b> contas.</div>
+        <div class="hint-text">Exibindo <b>@educadores.Count()</b> educadores.</div>
     </div>
 </div>
 
 @code {
-    IEnumerable<ContaModel> contas = new List<ContaModel>();
-    string filtroConta = string.Empty;
+    IEnumerable<EducadorModel> educadores = new List<EducadorModel>();
+    string filtroEducador = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        await ListarContas();
+        await ListarEducadores();
     }
 
-    private async Task ListarContas()
+    private async Task ListarEducadores()
     {
         try
         {
-            contas = await contaService.ListarContas();
+            educadores = await educadorService.ListarEducadores();
         }
         catch (Exception ex)
         {
-            toastService.ShowError(ex.Message, "Erro ao buscar contas");
+            toastService.ShowError(ex.Message, "Erro ao buscar educadores");
         }
     }
 
     private async void PesquisarNaListagem()
     {
-        if (string.IsNullOrWhiteSpace(filtroConta))
+        if (string.IsNullOrWhiteSpace(filtroEducador))
         {
-            await ListarContas();
+            await ListarEducadores();
         }
         else
         {
-            contas = contas.Where(p => p.Usuario.ToLower().Contains(filtroConta.ToLower())).ToList();
+            educadores = educadores.Where(p => p.Nome.ToLower().Contains(filtroEducador.ToLower())).ToList();
         }
     }
 
-    private void InserirConta()
+    private void InserirEducador()
     {
-        navigationManager.NavigateTo("/CadastroDeConta");
+        navigationManager.NavigateTo("/CadastroDeEducador");
     }
 
-    private void AlterarConta(int IdConta)
+    private void AlterarEducador(int IdEducador)
     {
-        navigationManager.NavigateTo($"/CadastroDeConta/{IdConta}");
+        navigationManager.NavigateTo($"/CadastroDeEducador/{IdEducador}");
     }
 
-    private async Task ApagarConta(ContaModel conta)
+    private async Task ApagarEducador(EducadorModel educador)
     {
-        if (await jsRuntime.InvokeAsync<bool>("confirm", $"Excluir a conta do usuário {conta.Usuario}?"))
+        if (await jsRuntime.InvokeAsync<bool>("confirm", $"Excluir o educador {educador.Nome}?"))
         {
-            string resposta = await jsRuntime.InvokeAsync<string>("prompt", $"Confirme o nome do usuário para excluir ({conta.Usuario}):");
+            string resposta = await jsRuntime.InvokeAsync<string>("prompt", $"Confirme o nome do educador para excluir ({educador.Nome}):");
 
-            if (conta.Usuario.Equals(resposta))
+            if (educador.Nome.Equals(resposta))
             {
-                await contaService.ApagarConta(conta);
-                toastService.ShowSuccess("Conta apagada com sucesso", "Atenção");
-                await ListarContas();
+                await educadorService.ApagarEducador(educador);
+                toastService.ShowSuccess("Educador apagado com sucesso", "Atenção");
+                await ListarEducadores();
             }
             else
             {
-                await jsRuntime.InvokeVoidAsync("alert", @"O usuário informado não coincide com o usuário da conta.
+                await jsRuntime.InvokeVoidAsync("alert", @"O educador informado não coincide com o educador cadastrado.
 Portanto ele não será excluído.");
             }
         }
