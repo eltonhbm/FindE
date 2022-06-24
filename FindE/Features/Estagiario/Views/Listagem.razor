@@ -1,41 +1,43 @@
 ﻿@page "/listagem"
 
-<table class="table caption-top">
-    <caption>Lista de Estágiarios</caption>
-    <thead>
-        <tr>
-            <th scope="col">Nome</th>
-            <th scope="col">Curso</th>
-            <th scope="col">Série</th>
-            <th scope="col">Instituição</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>Judas</td>
-
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>ETEC</td>
-            <td>FATEC</td>
-            <td>CLEBER</td>
-        </tr>
-    </tbody>
-</table>
-<button type="button" class="btn btn-primary">Salvar</button>
-<button type="button" class="btn btn-primary bi bi-pencil">
-    Editar
-</button>
+<div>
+    <div class="container-fluid" style="padding: 5px">
+        <div class="row g-2">
+            <div class="col-md-6">
+                <h5>Estágiarios que estão cadastradas</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-responsive-sm table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th style="width: 80px" , valign="middle">Id</th>
+                            <th>Usuário</th>
+                            <th class="thBadgeCustom">Perfil</th>
+                            <th><span class="float-sm-end">Ações</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Guilherme</td>
+                            <td>Adm</td>
+                            <td>
+                                <div class="float-sm-end">
+                                    <button type="button" class="btn btn-primary btn-sm" title="Alterar conta">
+                                        <div class="bi bi-pencil"></div>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm" title="Apagar conta">
+                                        <div class="bi bi-trash"></div>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
 
