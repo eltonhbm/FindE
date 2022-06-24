@@ -2,6 +2,7 @@ using Blazored.Toast;
 using FindE.Data;
 using FindE.Features.Cep.Services;
 using FindE.Features.Conta.Services;
+using FindE.Features.Educador.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,7 @@ builder.Services.AddBlazoredToast();
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseSqlite("Data Source = FindE.db"));
 builder.Services.AddSingleton<CepService>();
 builder.Services.AddScoped<ContaService>();
+builder.Services.AddScoped<EducadorService>();
 
 var app = builder.Build();
 

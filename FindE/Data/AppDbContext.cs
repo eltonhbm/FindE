@@ -1,4 +1,5 @@
 ﻿using FindE.Features.Conta.Models;
+using FindE.Features.Educador.Models;
 using FindE.Features.Conta.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ namespace FindE.Data
         { }
 
         public DbSet<ContaModel> Conta { get; set; }
+        public DbSet<EducadorModel> Educador { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

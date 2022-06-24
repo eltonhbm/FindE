@@ -1,0 +1,66 @@
+﻿@page "/CadastroDeEducador"
+@page "/CadastroDeEducador/{IdEducador:int}"
+@using FindE.Features.Educador.Models
+@inject FindE.Features.Educador.Services.EducadorService educadorService
+@inject NavigationManager navigationManager
+@inject IToastService toastService
+
+<h4 style="padding-bottom: 10px;">Cadastro de educador</h4>
+<EditForm Model="@Educador" style="max-width: 250px;" class="row g-2" OnValidSubmit="GravarEducador">
+    <div class="form-group">
+        <label for="txtNome">Nome</label>
+        <input type="text" id="txtNome" class="form-control" @bind="@Educador.Nome" autocomplete="off" required autofocus />
+    </div>
+    <div class="form-group">
+        <label for="txtMiniBio">Mini bio</label>
+        <textarea id="txtMiniBio" class="form-control" @bind="@Educador.MiniBio" required />
+    </div>
+    <div>
+        <div style="padding-top: 8px;" class="float-end">
+            <button type="reset" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int IdEducador { get; set; }
+    private EducadorModel Educador = new EducadorModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (IdEducador > 0)
+        {
+            Educador = await educadorService.RetornarEducador(IdEducador);
+        }
+    }
+
+    private async Task GravarEducador()
+    {
+        try
+        {
+            if (IdEducador > 0)
+            {
+                await educadorService.AlterarEducador(Educador);
+                toastService.ShowSuccess("Educador alterado com sucesso.", "Tudo ok!");
+            }
+            else
+            {
+                await educadorService.InserirEducador(Educador);
+                toastService.ShowSuccess("Educador inserido com sucesso.", "Tudo ok!");
+            }
+
+            navigationManager.NavigateTo("/ListagemDeEducadores");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message, "Erro ao cadastrar educador");
+        }
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/ListagemDeEducadores");
+    }
+}
