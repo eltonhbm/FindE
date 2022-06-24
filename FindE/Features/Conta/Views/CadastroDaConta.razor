@@ -1,14 +1,15 @@
 ﻿@page "/CadastroDeConta"
+@page "/CadastroDeConta/{IdConta:int}"
 @using FindE.Features.Conta.Models
 @inject FindE.Features.Conta.Services.ContaService contaService
 @inject NavigationManager navigationManager
 @inject IToastService toastService
 
-<h5 style="padding-bottom: 10px;">Cadastro de conta</h5>
-<EditForm Model="@Conta" style="max-width: 250px;" class="row g-2" OnValidSubmit="InserirConta">
+<h4 style="padding-bottom: 10px;">Cadastro de conta</h4>
+<EditForm Model="@Conta" style="max-width: 250px;" class="row g-2" OnValidSubmit="GravarConta">
     <div class="form-group">
         <label for="txtUsuario">Usuario</label>
-        <input type="text" id="txtUsuario" class="form-control" @bind="@Conta.Usuario" required />
+        <input type="text" id="txtUsuario" class="form-control" @bind="@Conta.Usuario" required autofocus />
     </div>
     <div class="form-group">
         <label for="txtSenha">Senha</label>
@@ -29,21 +30,40 @@
     </div>
     <div>
         <div style="padding-top: 8px;" class="float-end">
-            <button class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+            <button type="reset" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
             <button type="submit" class="btn btn-success">Salvar</button>
         </div>
     </div>
 </EditForm>
 
 @code {
+    [Parameter]
+    public int IdConta { get; set; }
     private ContaModel Conta = new ContaModel();
 
-    private async Task InserirConta()
+    protected override async Task OnInitializedAsync()
+    {
+        if (IdConta > 0)
+        {
+            Conta = await contaService.RetornarConta(IdConta);
+        }
+    }
+
+    private async Task GravarConta()
     {
         try
         {
-            await contaService.InserirConta(Conta);
-            toastService.ShowSuccess("Conta inserida com sucesso.", "Tudo ok!");
+            if (IdConta > 0)
+            {
+                await contaService.AlterarConta(Conta);
+                toastService.ShowSuccess("Conta alterada com sucesso.", "Tudo ok!");
+            }
+            else
+            {
+                await contaService.InserirConta(Conta);
+                toastService.ShowSuccess("Conta inserida com sucesso.", "Tudo ok!");
+            }
+
             navigationManager.NavigateTo("/ListagemDeContas");
         }
         catch (Exception ex)

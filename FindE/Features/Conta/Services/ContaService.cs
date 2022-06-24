@@ -10,7 +10,7 @@ namespace FindE.Features.Conta.Services
 
         public ContaService(AppDbContext dbContext)
         {
-            this.dbContext=dbContext;
+            this.dbContext = dbContext;
         }
 
         public async Task<List<ContaModel>> ListarContas()
@@ -62,6 +62,12 @@ namespace FindE.Features.Conta.Services
             {
                 throw;
             }
+        }
+
+        public async Task<ContaModel> RetornarConta(int IdConta)
+        {
+            var conta = await dbContext.Conta.Where(c => c.Id == IdConta).ToListAsync();
+            return conta.Single();
         }
     }
 }
