@@ -4,7 +4,7 @@
 
 namespace FindE.Migrations
 {
-    public partial class PrimeiroCommit : Migration
+    public partial class PrimeiraVersao : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

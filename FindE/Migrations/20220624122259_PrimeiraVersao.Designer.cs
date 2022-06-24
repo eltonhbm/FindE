@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FindE.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220622023125_PrimeiroCommit")]
-    partial class PrimeiroCommit
+    [Migration("20220624122259_PrimeiraVersao")]
+    partial class PrimeiraVersao
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
