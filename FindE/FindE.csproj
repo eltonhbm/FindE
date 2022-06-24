@@ -5,6 +5,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Features\Empresa\Services\sha256Service.cs" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Blazored.Toast" Version="3.2.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.6" />
