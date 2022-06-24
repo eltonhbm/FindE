@@ -13,19 +13,13 @@ namespace FindE.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ContaModel>().HasData(ListarContas());
+            modelBuilder.Entity<ContaModel>().HasData(DadosIniciais());
             base.OnModelCreating(modelBuilder);
         }
 
-        private List<ContaModel> ListarContas()
-        {
-            var listaDeContas = new List<ContaModel>()
-            {
-
-                new ContaModel {Id = 1, Usuario = "sistema", Senha = sha256Service.CalcularHashSha256("pTech017Sbr"), Perfil = PerfilEnum.Administrador }
-            };
-
-            return listaDeContas;
-        }
+        private List<ContaModel> DadosIniciais()
+            => new() { new ContaModel { Id = 1, Usuario = "sistema",
+                Senha = sha256Service.CalcularHashSha256("pTech017Sbr"),
+                Perfil = PerfilEnum.Administrador } };
     }
 }

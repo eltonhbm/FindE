@@ -6,12 +6,12 @@
 @inject IJSRuntime jsRuntime
 
 <div>
-    <div class="container-fluid" style="padding: 5px">
+    <div class="container-fluid">
         <div class="row g-2">
-            <div class="col-md-6">
-                <h5>Contas de acesso ao sistema</h5>
+            <div class="col-md-4">
+                <h4>Contas de acesso ao sistema</h4>
             </div>
-            <div class="col-md-2" style="padding-right: 2px">
+            <div class="col-md-4">
                 <input @bind=filtroConta onkeyup="if (event.keyCode == 13) document.getElementById('btnPesquisarConta').click()" type="text" class="form-control" placeholder="Usuário">
             </div>
             <div class="col-md-2">
@@ -22,11 +22,11 @@
             </div>
         </div>
     </div>
-    <div class="table-responsive">
-        <table class="table table-responsive-sm table-striped table-hover">
+    <div class="table-responsive-sm" style="padding-top: 8px;">
+        <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th style="width: 80px" , valign="middle">Id</th>
+                    <th>Id</th>
                     <th>Usuário</th>
                     <th class="thBadgeCustom">Perfil</th>
                     <th><span class="float-sm-end">Ações</span></th>
@@ -54,7 +54,7 @@
                             }
                             <td>
                                 <div class="float-sm-end">
-                                    <button type="button" class="btn btn-primary btn-sm" title="Alterar conta" @onclick="() => AlterarConta(conta)">
+                                    <button type="button" class="btn btn-primary btn-sm" title="Alterar conta" @onclick="() => AlterarConta(conta.Id)">
                                         <div class="bi bi-pencil"></div>
                                     </button>
                                     <button type="button" class="btn btn-danger btn-sm" title="Apagar conta" @onclick="() => ApagarConta(conta)">
@@ -115,10 +115,9 @@
         navigationManager.NavigateTo("/CadastroDeConta");
     }
 
-    private async Task AlterarConta(ContaModel conta)
+    private void AlterarConta(int IdConta)
     {
-        //await contaService.AlterarConta(conta);
-        //await ListarContas();
+        navigationManager.NavigateTo($"/CadastroDeConta/{IdConta}");
     }
 
     private async Task ApagarConta(ContaModel conta)
@@ -135,7 +134,8 @@
             }
             else
             {
-                await jsRuntime.InvokeVoidAsync("alert", "Usuário informado não coincide com o usuário da conta para ser excluído.");
+                await jsRuntime.InvokeVoidAsync("alert", @"O usuário informado não coincide com o usuário da conta.
+Portanto ele não será excluído.");
             }
         }
     }

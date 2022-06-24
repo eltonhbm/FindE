@@ -10,18 +10,27 @@ namespace FindE.Features.Conta.Services
 
         public ContaService(AppDbContext dbContext)
         {
-            this.dbContext=dbContext;
+            this.dbContext = dbContext;
         }
 
         public async Task<List<ContaModel>> ListarContas()
         {
-            return await dbContext.Conta.ToListAsync();
+            try
+            {
+                return await dbContext.Conta.ToListAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<ContaModel> InserirConta(ContaModel conta)
         {
             try
             {
+                conta.Senha = sha256Service.CalcularHashSha256(conta.Senha);
+
                 dbContext.Conta.Add(conta);
                 await dbContext.SaveChangesAsync();
             }
@@ -57,6 +66,20 @@ namespace FindE.Features.Conta.Services
             {
                 dbContext.Conta.Remove(conta);
                 await dbContext.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ContaModel> RetornarConta(int IdConta)
+        {
+            try
+            {
+                var conta = await dbContext.Conta.Where(c => c.Id == IdConta).ToListAsync();
+                conta.Single().Senha = string.Empty;
+                return conta.Single();
             }
             catch (Exception)
             {
