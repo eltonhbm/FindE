@@ -9,15 +9,11 @@
 <EditForm Model="@Conta" style="max-width: 250px;" class="row g-2" OnValidSubmit="GravarConta">
     <div class="form-group">
         <label for="txtUsuario">Usuario</label>
-        <input type="text" id="txtUsuario" class="form-control" @bind="@Conta.Usuario" required autofocus />
+        <input type="text" id="txtUsuario" class="form-control" @bind="@Conta.Usuario" autocomplete="off" required autofocus />
     </div>
-    <div class="form-group">
+    <div class="form-group" id="show_hide_password">
         <label for="txtSenha">Senha</label>
         <input type="password" id="txtSenha" class="form-control" @bind="@Conta.Senha" required />
-    </div>
-    <div class="form-group">
-        <label for="txtSenhaConfirmacao">Confirmar senha</label>
-        <input type="password" id="txtSenhaConfirmacao" class="form-control" required />
     </div>
     <div class="form-group">
         <label for="cbxPerfil">Perfil</label>

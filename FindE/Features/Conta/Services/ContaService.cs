@@ -15,13 +15,22 @@ namespace FindE.Features.Conta.Services
 
         public async Task<List<ContaModel>> ListarContas()
         {
-            return await dbContext.Conta.ToListAsync();
+            try
+            {
+                return await dbContext.Conta.ToListAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<ContaModel> InserirConta(ContaModel conta)
         {
             try
             {
+                conta.Senha = sha256Service.CalcularHashSha256(conta.Senha);
+
                 dbContext.Conta.Add(conta);
                 await dbContext.SaveChangesAsync();
             }
@@ -66,8 +75,16 @@ namespace FindE.Features.Conta.Services
 
         public async Task<ContaModel> RetornarConta(int IdConta)
         {
-            var conta = await dbContext.Conta.Where(c => c.Id == IdConta).ToListAsync();
-            return conta.Single();
+            try
+            {
+                var conta = await dbContext.Conta.Where(c => c.Id == IdConta).ToListAsync();
+                conta.Single().Senha = string.Empty;
+                return conta.Single();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

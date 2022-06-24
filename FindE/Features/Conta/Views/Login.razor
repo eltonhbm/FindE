@@ -1,28 +1,80 @@
 ﻿@page "/login"
+@using FindE.Features.Conta.Models
+@inject FindE.Features.Conta.Services.ContaService contaService
+@inject NavigationManager navigationManager
+@inject IToastService toastService
 
-<div class="wrapper">
-    <div class="logo">
-        <img src="/logo_gold.png" alt="">
-    </div>
-    <div class="text-center mt-3 name">
-        FindE
-    </div>
-    <form class="p-2 mt-3">
-        <div class="form-field d-flex align-items-center">
-            <span class="far fa-user"></span>
-            <input type="text" name="userName" id="userName" placeholder="Usuário">
+<div class="section container">
+    <div class="row full-height justify-content-center">
+        <div class="col-12 text-center align-self-center py-5">
+            <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                <h6 class="mb-0 pb-3"><span>Entrar </span><span>Cadastrar-se</span></h6>
+                <input class="checkbox" type="checkbox" id="reg-log" name="reg-log" />
+                <label for="reg-log"></label>
+                <div class="card-3d-wrap mx-auto">
+                    <div class="card-3d-wrapper">
+                        <div class="card-front">
+                            <div class="center-wrap">
+                                <div class="section text-center">
+                                    <h4 class="mb-4 pb-3">Entrar</h4>
+                                    <div class="form-group">
+                                        <input type="email" name="logemail" class="form-style" placeholder="Usuário" id="logemail" autocomplete="off">
+                                        <i class="input-icon uil uil-at"></i>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <input type="password" name="logpass" class="form-style" placeholder="Senha" id="logpass" autocomplete="off">
+                                        <i class="input-icon uil uil-lock-alt"></i>
+                                    </div>
+                                    <a href="#" class="btn mt-4">Entrar</a>
+                                    <p class="mb-0 mt-4 text-center"><a href="#0" class="link">Esqueceu sua senha?</a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="center-wrap">
+                                <form class="section text-center" @onsubmit="GravarConta">
+                                    <h4 class="mb-4 pb-3">Cadastrar-se</h4>
+                                    <div class="form-group">
+                                        <input @bind="Conta.Usuario" type="text" name="logname" class="form-style" placeholder="Usuário" id="logname" autocomplete="off" required>
+                                        <i class="input-icon uil uil-user"></i>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <input @bind="Conta.Senha" type="password" name="logpass" class="form-style" placeholder="Senha" id="password" autocomplete="off" required>
+                                        <i class="input-icon uil uil-at"></i>
+                                    </div>
+                                    <div class="form-group mt-2">
+                                        <select class="form-select">
+                                            <option>Empresa</option>
+                                            <option selected>Estagiário</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn mt-4">Cadastrar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-field d-flex align-items-center">
-            <span class="fas fa-key"></span>
-            <input type="password" name="password" id="pwd" placeholder="Senha">
-        </div>
-        <button class="btn mt-3">Entrar</button>
-    </form>
-    <div class="text-center fs-6">
-        <a href="#">Esqueceu a senha?</a> ou <a href="CadatroDeConta">Cadastrar-se</a>
     </div>
 </div>
 
 @code {
 
+    private ContaModel Conta = new ContaModel();
+
+    private async Task GravarConta()
+    {
+        try
+        {
+            await contaService.InserirConta(Conta);
+            toastService.ShowSuccess("Conta inserida com sucesso.", "Tudo ok!");
+
+            navigationManager.NavigateTo("/");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message, "Erro ao cadastrar conta");
+        }
+    }
 }
