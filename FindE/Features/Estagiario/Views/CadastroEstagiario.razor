@@ -1,0 +1,81 @@
+﻿@page "/CadastroEstagiario"
+@page "/CadastroEstagiario/{IdEstagiario:int}"
+@using FindE.Features.Estagiario.Models
+@inject FindE.Features.Estagiario.Services.EstagiarioService estagiarioService
+@inject NavigationManager navigationManager
+@inject IToastService toastService
+
+<h4 style="padding-bottom: 10px;">Cadastro de estagiario</h4>
+<EditForm Model="@Estagiario" style="max-width: 250px;" class="row g-2" OnValidSubmit="GravarEstagiario">
+    <div class="form-group">
+        <label for="txtNome">Nome</label>
+        <input type="text" id="txtNome" class="form-control" @bind="@Estagiario.Nome" autocomplete="off" required autofocus />
+    </div>
+    <div class="form-group">
+        <label for="txtEmail">E-mail</label>
+        <input type="text" id="txtEmail" class="form-control" @bind="@Estagiario.Email" required />
+    </div>
+    <div class="form-group">
+        <label for="txtCurso">Curso</label>
+        <input type="text" id="txtCurso" class="form-control" @bind="@Estagiario.Curso" required />
+    </div>
+    <div class="form-group">
+        <label for="txtWhatsApp">WhatsApp</label>
+        <input type="text" id="txtWhatsApp" class="form-control" @bind="@Estagiario.WhatsApp" required />
+    </div>
+     <div class="form-group">
+        <label for="dateIdade">Data de nascimento</label>
+        <input type="date" id="dateIdade" class="form-control" @bind="@Estagiario.DataDeNascimento" required />
+    </div>
+     
+    <div>
+        <div style="padding-top: 8px;" class="float-end">
+            <button type="reset" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int IdEstagiario { get; set; }
+    private EstagiarioModel Estagiario = new EstagiarioModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (IdEstagiario > 0)
+        {
+            Estagiario = await estagiarioService.RetornarEstagiario(IdEstagiario);
+        }
+    }
+
+    private async Task GravarEstagiario()
+    {
+        try
+        {
+            if (IdEstagiario > 0)
+            {
+                await estagiarioService.AlterarEstagiario(Estagiario);
+                toastService.ShowSuccess("Estágiario alterado com sucesso.", "Tudo ok!");
+            }
+            else
+            {
+                await estagiarioService.InserirEstagiario(Estagiario);
+                toastService.ShowSuccess("Estágiario inserido com sucesso.", "Tudo ok!");
+            }
+
+            navigationManager.NavigateTo("/ListagemEstagiario");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message, "Erro ao cadastrar estágiario");
+        }
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/ListagemEstagiario");
+    }
+
+
+}
