@@ -6,6 +6,7 @@
         public string WhatsApp { get; set; }
         public DateTime DataDeNascimento { get; set; }
         public string Curso { get; set; }
+        public int Id { get; set; }
         public int Idade
         {
             get { return (DateTime.Now - DataDeNascimento).Days / 365; }

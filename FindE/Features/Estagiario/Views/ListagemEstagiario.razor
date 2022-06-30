@@ -1,0 +1,137 @@
+﻿@page "/listagemEstagiario"
+@using FindE.Features.Estagiario.Models
+@inject IToastService toastService
+@inject FindE.Features.Estagiario.Services.EstagiarioService estagiarioService
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+
+<div>
+    <div class="container-fluid">
+        <div class="row g-2">
+            <div class="col-md-4">
+                <h4>Estágiarios cadastrados</h4>
+            </div>
+            <div class="col-md-4">
+                <input @bind=filtroEstagiario onkeyup="if (event.keyCode == 13) document.getElementById('btnPesquisarEstagiario').click()" type="text" class="form-control" placeholder="Nome">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-outline-primary" type="button" id="btnPesquisarEstagiario" @onclick="() => PesquisarNaListagem()">Pesquisar</button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-success float-md-end" type="button" @onclick="() => InserirEstagiarios()">Inserir</button>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive-sm" style="padding-top: 8px;">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>E-mail</th>
+                    <th>WhatsApp</th>
+                    <th>Idade</th>
+                    <th>Curso</th>
+                    <th><span class="float-sm-end">Ações</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (estagiarios.Any())
+                {
+                    @foreach (var estagiario in estagiarios)
+                    {
+                        <tr>
+                            <td class="align-middle">@estagiario.Id</td>
+                            <td class="align-middle">@estagiario.Nome</td>
+                            <td class="align-middle">@estagiario.Email</td>
+                            <td class="align-middle">@estagiario.WhatsApp</td>
+                            <td class="align-middle">@estagiario.Idade</td>
+                            <td class="align-middle">@estagiario.Curso</td>
+                            <td>
+                                <div class="float-sm-end">
+                                    <button type="button" class="btn btn-primary btn-sm" title="Alterar estagiario" @onclick="() => AlterarEstagiario(estagiario.Id)">
+                                        <div class="bi bi-pencil"></div>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm" title="Apagar educador" @onclick="() => ApagarEstagiario(estagiario)">
+                                        <div class="bi bi-trash"></div>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="4"><strong>Nenhum educador cadastrado.</strong></td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <div class="hint-text">Exibindo <b>@estagiarios.Count()</b> educadores.</div>
+    </div>
+</div>
+
+@code {
+    IEnumerable<EstagiarioModel> estagiarios = new List<EstagiarioModel>();
+    string filtroEstagiario = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ListarEstagiarios();
+    }
+
+    private async Task ListarEstagiarios()
+    {
+        try
+        {
+            estagiarios = await estagiarioService.ListarEstagiarios();
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message, "Erro ao buscar estágiarios");
+        }
+    }
+
+    private async void PesquisarNaListagem()
+    {
+        if (string.IsNullOrWhiteSpace(filtroEstagiario))
+        {
+            await ListarEstagiarios();
+        }
+        else
+        {
+            estagiarios = estagiarios.Where(p => p.Nome.ToLower().Contains(filtroEstagiario.ToLower())).ToList();
+        }
+    }
+
+    private void InserirEstagiarios()
+    {
+        navigationManager.NavigateTo("/CadastroEstagiario");
+    }
+
+    private void AlterarEstagiario(int IdEstagiario)
+    {
+        navigationManager.NavigateTo($"/CadastroEstagiario/{IdEstagiario}");
+    }
+
+    private async Task ApagarEstagiario(EstagiarioModel estagiario)
+    {
+        if (await jsRuntime.InvokeAsync<bool>("confirm", $"Excluir o estágiario {estagiario.Nome}?"))
+        {
+            string resposta = await jsRuntime.InvokeAsync<string>("prompt", $"Confirme o nome do estágiario para excluir ({estagiario.Nome}):");
+
+            if (estagiario.Nome.Equals(resposta))
+            {
+                await estagiarioService.ApagarEstagiario(estagiario);
+                toastService.ShowSuccess("Estágiario apagado com sucesso", "Atenção");
+                await ListarEstagiarios();
+            }
+            else
+            {
+                await jsRuntime.InvokeVoidAsync("alert", @"O estágiario informado não coincide com o educador cadastrado.
+Portanto ele não será excluído.");
+            }
+        }
+    }
+}
