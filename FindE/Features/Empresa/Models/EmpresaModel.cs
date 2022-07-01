@@ -7,6 +7,5 @@
         public string Responsavel { get; set; }
         public string Email { get; set; }
         public string WhatsApp { get; set; } 
-        public string FotoEmpresa  { get; set; }
     }
 }
