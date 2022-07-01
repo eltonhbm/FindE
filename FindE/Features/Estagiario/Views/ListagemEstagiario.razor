@@ -26,6 +26,7 @@
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Nome</th>
                     <th>E-mail</th>
                     <th>WhatsApp</th>
@@ -51,7 +52,7 @@
                                     <button type="button" class="btn btn-primary btn-sm" title="Alterar estagiario" @onclick="() => AlterarEstagiario(estagiario.Id)">
                                         <div class="bi bi-pencil"></div>
                                     </button>
-                                    <button type="button" class="btn btn-danger btn-sm" title="Apagar educador" @onclick="() => ApagarEstagiario(estagiario)">
+                                    <button type="button" class="btn btn-danger btn-sm" title="Apagar estagiario" @onclick="() => ApagarEstagiario(estagiario)">
                                         <div class="bi bi-trash"></div>
                                     </button>
                                 </div>
@@ -62,13 +63,13 @@
                 }
                 else
                 {
-                    <tr><td colspan="4"><strong>Nenhum educador cadastrado.</strong></td></tr>
+                    <tr><td colspan="7"><strong>Nenhum estagiário cadastrado.</strong></td></tr>
                 }
             </tbody>
         </table>
     </div>
     <div>
-        <div class="hint-text">Exibindo <b>@estagiarios.Count()</b> educadores.</div>
+        <div class="hint-text">Exibindo <b>@estagiarios.Count()</b> estagiários.</div>
     </div>
 </div>
 
