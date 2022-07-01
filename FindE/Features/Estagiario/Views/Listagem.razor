@@ -1,42 +1,59 @@
 ﻿@page "/listagem"
+@inject NavigationManager UriHelper
 
-<table class="table caption-top">
-    <caption>Lista de Estágiarios</caption>
-    <thead>
-        <tr>
-            <th scope="col">Nome</th>
-            <th scope="col">Curso</th>
-            <th scope="col">Série</th>
-            <th scope="col">Instituição</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>Judas</td>
-
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>fat</td>
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>ETEC</td>
-            <td>FATEC</td>
-            <td>CLEBER</td>
-        </tr>
-    </tbody>
-</table>
-<button type="button" class="btn btn-primary">Salvar</button>
-<button type="button" class="btn btn-primary bi bi-pencil">
-    Editar
-</button>
+<div>
+    <div class="container-fluid">
+        <div class="row g-2">
+            <div class="col-md-6">
+                <h5>Estágiarios que estão cadastradas</h5>
+            </div>
+            <div class="table-responsive">
+                <div class="col-md-12">
+                    <a href="CadastroEstagiario"><button class="btn btn-success float-md-end" type="button" id="btnInserirEmpresa">Inserir</button></a>
+                </div>
+                <table class="table table-responsive table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Nome</th>
+                            <th class="thBadgeCustom">E-mail</th>
+                            <th>WhatsApp</th>
+                            <th>Usuário</th>
+                            <th>Curso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Eduardo</td>
+                            <td>awaawa@gmail.com</td>
+                            <td>(17)997218239</td>
+                            <td>Estágiario</td>
+                            <td>Administração</td>
+                            <td>
+                                <div class="float-sm-end">
+                                    <button type="button" class="btn btn-primary btn-sm" title="Alterar informações">
+                                        <a @onclick=@Navigate>Alterar Informações</a>
+                                        <div class="bi bi-pencil"></div>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-sm" title="Apagar informações">
+                                        <a @onclick=@Navigate>Deletar Informações</a>
+                                        <div class="bi bi-trash"></div>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 
 @code {
-
+    void Navigate()
+    {
+        UriHelper.NavigateTo("CadastroEstagiario");
+    }
 }
+

@@ -3,8 +3,10 @@ using FindE.Data;
 using FindE.Features.Cep.Services;
 using FindE.Features.Conta.Services;
 using FindE.Features.Educador.Services;
+using FindE.Features.Estagiario.Services;
 using FindE.Features.Empresa.Services;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,7 @@ builder.Services.AddSingleton<CepService>();
 builder.Services.AddScoped<ContaService>();
 builder.Services.AddScoped<EducadorService>();
 builder.Services.AddScoped<EmpresaService>();
+builder.Services.AddScoped<EstagiarioService>();
 
 var app = builder.Build();
 

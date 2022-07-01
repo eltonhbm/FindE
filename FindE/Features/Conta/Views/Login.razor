@@ -18,11 +18,11 @@
                                 <div class="section text-center">
                                     <h4 class="mb-4 pb-3">Entrar</h4>
                                     <div class="form-group">
-                                        <input type="email" name="logemail" class="form-style" placeholder="Usuário" id="logemail" autocomplete="off">
+                                        <input type="email" class="form-style" placeholder="Usuário" autocomplete="off">
                                         <i class="input-icon uil uil-at"></i>
                                     </div>
                                     <div class="form-group mt-2">
-                                        <input type="password" name="logpass" class="form-style" placeholder="Senha" id="logpass" autocomplete="off">
+                                        <input type="password" class="form-style" placeholder="Senha" autocomplete="off">
                                         <i class="input-icon uil uil-lock-alt"></i>
                                     </div>
                                     <a href="#" class="btn mt-4">Entrar</a>
@@ -35,18 +35,19 @@
                                 <form class="section text-center" @onsubmit="GravarConta">
                                     <h4 class="mb-4 pb-3">Cadastrar-se</h4>
                                     <div class="form-group">
-                                        <input @bind="Conta.Usuario" type="text" name="logname" class="form-style" placeholder="Usuário" id="logname" autocomplete="off" required>
+                                        <input @bind="Conta.Usuario" type="text" class="form-style" placeholder="Usuário" autocomplete="off" required>
                                         <i class="input-icon uil uil-user"></i>
                                     </div>
                                     <div class="form-group mt-2">
-                                        <input @bind="Conta.Senha" type="password" name="logpass" class="form-style" placeholder="Senha" id="password" autocomplete="off" required>
+                                        <input @bind="Conta.Senha" type="password" class="form-style" placeholder="Senha" autocomplete="off" required>
                                         <i class="input-icon uil uil-at"></i>
                                     </div>
                                     <div class="form-group mt-2">
-                                        <select class="form-select">
-                                            <option>Empresa</option>
-                                            <option selected>Estagiário</option>
+                                        <select @bind="Conta.Perfil" class="form-style">
+                                            <option value="1">Empresa</option>
+                                            <option value="2" selected>Estagiário</option>
                                         </select>
+                                        <i class="input-icon uil uil-user"></i>
                                     </div>
                                     <button type="submit" class="btn mt-4">Cadastrar</button>
                                 </form>
