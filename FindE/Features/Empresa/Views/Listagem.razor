@@ -1,4 +1,9 @@
 ﻿@page "/listagemEmpresa"
+@using FindE.Features.Empresa.Models
+@inject FindE.Features.Empresa.Services.EmpresaService empresaService
+@inject IToastService toastService
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
 
 <div>
     <div class="container-fluid" style="padding: 5px">
@@ -19,7 +24,7 @@
                 <table class="table table-responsive-sm table-striped table-hover">
                     <thead>
                         <tr>
-                            <th style="width: 80px" , valign="middle">ID</th>
+                            <th>Id</th>
                             <th>Nome da Empresa</th>
                             <th>Nome do Responsável</th>
                             <th>E-mail</th>
@@ -28,29 +33,103 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>SistemasBR</td>
-                            <td>Fernando</td>
-                            <td>fernando@sistemas.br</td>
-                            <td>(17)9 9158-5435</td>
-                            <td>
-                                <div class="float-sm-end">
-                                    <button type="button" class="btn btn-primary btn-sm" title="Alterar conta">
-                                        <div class="bi bi-pencil"></div>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm" title="Apagar conta">
-                                        <div class="bi bi-trash"></div>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                        @if (empresa.Any())
+                        {
+                            @foreach (var empresa in empresa)
+                            {
+                                <tr>
+                                    <td class="align-middle">@empresa.Id</td>
+                                    <td class="align-middle">@empresa.Nome</td>
+                                    <td class="align-middle">@empresa.Responsavel</td>
+                                    <td class="align-middle">@empresa.Email</td>
+                                     <td class="align-middle">@empresa.WhatsApp</td>
+                                    <td>
+                                        <div class="float-sm-end">
+                                            <button type="button" class="btn btn-primary btn-sm" title="Alterar empresa" @onclick="() => AlterarEmpresa(empresa.Id)">
+                                                <div class="bi bi-pencil"></div>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm" title="Apagar empresa" @onclick="() => ApagarEmpresa(empresa)">
+                                                <div class="bi bi-trash"></div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="4"><strong>Nenhum educador cadastrado.</strong></td></tr>
+                        }
                     </tbody>
                 </table>
             </div>
         </div>
+        <div>
+        <div class="hint-text">Exibindo <b>@empresa.Count()</b> empresas.</div>
+    </div>
     </div>
 </div>
 @code {
 
+    IEnumerable<EmpresaModel> empresa = new List<EmpresaModel>();
+    string filtroEmpresa = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ListarEmpresa();
+    }
+
+    private async Task ListarEmpresa()
+    {
+        try
+        {
+            empresa = await empresaService.ListarEmpresa();
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message, "Erro ao buscar empresas");
+        }
+    }
+
+    private async void PesquisarNaListagem()
+    {
+        if (string.IsNullOrWhiteSpace(filtroEmpresa))
+        {
+            await ListarEmpresa();
+        }
+        else
+        {
+            empresa = empresa.Where(p => p.Nome.ToLower().Contains(filtroEmpresa.ToLower())).ToList();
+        }
+    }
+
+    private void InserirEmpresa()
+    {
+        navigationManager.NavigateTo("/CadastroEmpresa");
+    }
+
+    private void AlterarEmpresa(int IdEmpresa)
+    {
+        navigationManager.NavigateTo($"/CadastroEmpresa/{IdEmpresa}");
+    }
+
+    private async Task ApagarEmpresa(EmpresaModel empresa)
+    {
+        if (await jsRuntime.InvokeAsync<bool>("confirm", $"Excluir o empresa {empresa.Nome}?"))
+        {
+            string resposta = await jsRuntime.InvokeAsync<string>("prompt", $"Confirme o nome da empresa para excluir ({empresa.Nome}):");
+
+            if (empresa.Nome.Equals(resposta))
+            {
+                await empresaService.ApagarEmpresa(empresa);
+                toastService.ShowSuccess("Empresa apagada com sucesso", "Atenção");
+                await ListarEmpresa();
+            }
+            else
+            {
+                await jsRuntime.InvokeVoidAsync("alert", @"A empresa informado não coincide com a empresa cadastrada.
+Portanto ele não será excluído.");
+            }
+        }
+    }
 }

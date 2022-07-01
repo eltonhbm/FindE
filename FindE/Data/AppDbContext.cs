@@ -1,6 +1,7 @@
 ﻿using FindE.Features.Estagiario.Models;
 using FindE.Features.Conta.Models;
 using FindE.Features.Educador.Models;
+using FindE.Features.Empresa.Models;
 using FindE.Features.Conta.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,7 @@ namespace FindE.Data
         public DbSet<ContaModel> Conta { get; set; }
         public DbSet<EducadorModel> Educador { get; set; }
         public DbSet<EstagiarioModel> Estagiario { get; set; }
+        public DbSet<EmpresaModel> Empresa { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

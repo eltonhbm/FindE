@@ -1,44 +1,73 @@
 ﻿@page "/CadastroEmpresa"
 @using FindE.Features.Empresa.Models
-@inject IToastService toastservice
+@inject FindE.Features.Empresa.Services.EmpresaService empresaService
+@inject NavigationManager navigationManager
+@inject IToastService toastService
 
-<PageTitle>Cadastro</PageTitle>
-
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">Cadastro de Empresa</h5>
-        <br />
-        <form class="row g-3">
-            <div class="col-md-6">
-                <label for="NomeEmpresa" class="form-label">Nome da Empresa:</label>
-                <input @bind="empresa.Nome" type="text" class="form-control" id="NomeEmpresa" required>
-            </div>
-            <div class="col-md-6">
-                <label for="nomeResponsavel" class="form-label">Nome do Responsável:</label>
-                <input @bind="empresa.Responsavel" type="text" class="form-control" id="NomeResponsavel" required>
-            </div>
-            <div class="col-md-6">
-                <label for="Email" class="form-label">E-mail:</label>
-                <input @bind="empresa.Email" type="email" class="form-control" id="Email" required>
-            </div>
-            <div class="col-4">
-                <label for="WhatsApp" class="form-label">WhatsApp:</label>
-                <input @bind="empresa.WhatsApp" type="tel" class="form-control" id="WhatsApp" required>
-            </div>
-            <div class="mb-3">
-                <label for="FotoEmpresa" class="form-label">Coloque a foto da sua empresa:</label>
-                <input @bind="empresa.FotoEmpresa" type="file" class="form-control" aria-label="FotoEmpresa">
-                <div class="invalid-feedback">Tipo de arquivo inválido</div>
-            </div>
-        </form>
+<h4 style="padding-bottom: 10px;">Cadastro de empresa</h4>
+<EditForm Model="@Empresa" style="max-width: 250px;" class="row g-2" OnValidSubmit="GravarEmpresa">
+    <div class="form-group">
+        <label for="txtNome">Nome</label>
+        <input type="text" id="txtNome" class="form-control" @bind="@Empresa.Nome" autocomplete="off" required autofocus />
     </div>
-</div>
+    <div class="form-group">
+        <label for="txtResponsavel">Responsável</label>
+        <input type="text" id="txtResponsavel" class="form-control" @bind="@Empresa.Responsavel" autocomplete="off" required autofocus />
+    </div>
+    <div class="form-group">
+        <label for="txtEmail">Email</label>
+        <input type="text" id="txtEmail" class="form-control" @bind="@Empresa.Email" autocomplete="off" required autofocus />
+    </div>
+    <div class="form-group">
+        <label for="txtWhatsapp">WhatsApp</label>
+        <input type="text" id="txtWhatsapp" class="form-control" @bind="@Empresa.WhatsApp" autocomplete="off" required autofocus />
+    </div>
+    <div>
+        <div style="padding-top: 8px;" class="float-end">
+            <button type="reset" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </div>
+</EditForm>
 
 @code {
-    EmpresaModel empresa;
+    [Parameter]
+    public int IdEmpresa { get; set; }
+    private EmpresaModel Empresa = new EmpresaModel();
 
     protected override async Task OnInitializedAsync()
     {
-        empresa = new EmpresaModel();
+        if (IdEmpresa > 0)
+        {
+            Empresa = await empresaService.RetornarEmpresa(IdEmpresa);
+        }
+    }
+
+    private async Task GravarEmpresa()
+    {
+        try
+        {
+            if (IdEmpresa > 0)
+            {
+                await empresaService.AlterarEmpresa(Empresa);
+                toastService.ShowSuccess("Empresa alterado com sucesso.", "Tudo ok!");
+            }
+            else
+            {
+                await empresaService.InserirEmpresa(Empresa);
+                toastService.ShowSuccess("Empresa inserido com sucesso.", "Tudo ok!");
+            }
+
+            navigationManager.NavigateTo("/Listagem");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message, "Erro ao cadastrar educador");
+        }
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/ListagemEmpresa");
     }
 }
