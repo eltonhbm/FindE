@@ -1,4 +1,4 @@
-﻿@page "/listagemEmpresa"
+﻿@page "/ListagemEmpresa"
 @using FindE.Features.Empresa.Models
 @inject FindE.Features.Empresa.Services.EmpresaService empresaService
 @inject IToastService toastService
@@ -58,7 +58,7 @@
                         }
                         else
                         {
-                            <tr><td colspan="4"><strong>Nenhum educador cadastrado.</strong></td></tr>
+                            <tr><td colspan="6"><strong>Nenhum educador cadastrado.</strong></td></tr>
                         }
                     </tbody>
                 </table>
@@ -128,7 +128,7 @@
             else
             {
                 await jsRuntime.InvokeVoidAsync("alert", @"A empresa informado não coincide com a empresa cadastrada.
-Portanto ele não será excluído.");
+Portanto ela não será excluído.");
             }
         }
     }

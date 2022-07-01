@@ -1,4 +1,5 @@
 ﻿@page "/CadastroEmpresa"
+@page "/CadastroEmpresa/{IdEmpresa:int}"
 @using FindE.Features.Empresa.Models
 @inject FindE.Features.Empresa.Services.EmpresaService empresaService
 @inject NavigationManager navigationManager
@@ -58,11 +59,11 @@
                 toastService.ShowSuccess("Empresa inserido com sucesso.", "Tudo ok!");
             }
 
-            navigationManager.NavigateTo("/Listagem");
+            navigationManager.NavigateTo("/ListagemEmpresa");
         }
         catch (Exception ex)
         {
-            toastService.ShowError(ex.Message, "Erro ao cadastrar educador");
+            toastService.ShowError(ex.Message, "Erro ao cadastrar empresa");
         }
     }
 
