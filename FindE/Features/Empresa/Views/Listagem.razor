@@ -6,12 +6,12 @@
 @inject IJSRuntime jsRuntime
 
 <div>
-    <div class="container-fluid" style="padding: 5px">
+    <div class="container-fluid">
         <div class="row g-2">
-            <div class="col-md-6">
-                <h5>Empresas que estão cadastradas</h5>
+            <div class="col-md-4">
+                <h4>Empresas que estão cadastradas</h4>
             </div>
-            <div class="col-md-2" style="padding-right: 2px">
+            <div class="col-md-4">
                 <input onkeyup="if (event.keyCode == 13) document.getElementById('btnPesquisarEmpresa').click()" type="text" class="form-control" placeholder="Empresas">
             </div>
             <div class="col-md-2">
@@ -20,7 +20,7 @@
             <div class="col-md-2">
                 <a href="CadastroEmpresa"><button class="btn btn-success float-md-end" type="button" id="btnInserirEmpresa">Inserir</button></a>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive" style="padding-top: 8px;">
                 <table class="table table-responsive-sm table-striped table-hover">
                     <thead>
                         <tr>

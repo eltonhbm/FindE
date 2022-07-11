@@ -2,54 +2,56 @@
 
 <PageTitle>FindE</PageTitle>
 
-<div class="page">
-    <main>
-        <BlazoredToasts Timeout="3"
-                        ShowProgressBar="true"
-                        Position="Blazored.Toast.Configuration.ToastPosition.BottomRight" />
+<body>
+    <div class="page">
+        <main>
+            <BlazoredToasts Timeout="3"
+                            ShowProgressBar="true"
+                            Position="Blazored.Toast.Configuration.ToastPosition.BottomRight" />
 
-        <nav class="navbar navbar-expand-lg bg-light sticky-top shadow-sm">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">
-                    <img src="/logo_black.png" height="24" width="24"> 
-                    <span>FindE</span>
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link" href="ListagemEstagiario">Estagiários</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="listagemEmpresa">Empresas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="ListagemDeEducadores">Educadores</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="ListagemDeContas">Contas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="sobre">Sobre</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="login">Login</a>
-                        </li>
-                    </ul>
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Pesquisar" aria-label="Search">
-                        <button class="btn btn-outline-primary" type="submit">Pesquisar</button>
-                    </form>
+            <nav id="main_nav" class="navbar navbar-expand-lg navbar-light bg-white shadow">
+                <div class="container d-flex justify-content-between align-items-center">
+                    <a class="navbar-brand h1" href="/">
+                        <i class='bx bx-buildings bx-sm text-dark'></i>
+                        <span class="text-dark h4">FindE</span>
+                    </a>
+                    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-toggler-success" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="align-self-center collapse navbar-collapse flex-fill  d-lg-flex justify-content-lg-between" id="navbar-toggler-success">
+                        <div class="flex-fill mx-xl-5 mb-2">
+                            <ul class="nav navbar-nav d-flex justify-content-between mx-xl-5 text-center text-dark">
+                                <li class="nav-item">
+                                    <a class="nav-link btn-outline-primary rounded-pill px-3" href="/ListagemEstagiario">Estagiário</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link btn-outline-primary rounded-pill px-3" href="/ListagemEmpresa">Empresa</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link btn-outline-primary rounded-pill px-3" href="/ListagemDeEducadores">Educador</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link btn-outline-primary rounded-pill px-3" href="/ListagemDeContas">Conta</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="navbar align-self-center d-flex">
+                            <a class="nav-link" href="#"><i class='bx bx-bell bx-sm bx-tada-hover text-primary'></i></a>
+                            <a class="nav-link" href="#"><i class='bx bx-cog bx-sm text-primary'></i></a>
+                            <a class="nav-link" href="#"><i class='bx bx-user-circle bx-sm text-primary'></i></a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
+    </div>
+</body>
+
+@code{
+    
+}
