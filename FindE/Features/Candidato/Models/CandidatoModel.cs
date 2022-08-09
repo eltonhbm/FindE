@@ -6,6 +6,7 @@ namespace FindE.Features.Candidato.Models
     {
         public int Id { get; set; }
         public int IdEstagiario { get; set; }
+        public EstagiarioModel Estagiario { get; set; }
         public DateTime DataDaCandidatura  { get; set; }
         public string Descricao { get; set; }
         public string FormacaoAcademica { get; set; }
