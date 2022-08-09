@@ -18,6 +18,14 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
+a, nav-link:hover{
+    color: darkblue;
+}
+
+a, nav-link:focus{
+    color: darkblue;
+}
+
 .content {
     padding-top: 1.1rem;
 }
