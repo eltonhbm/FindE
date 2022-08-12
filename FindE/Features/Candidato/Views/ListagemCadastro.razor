@@ -1,0 +1,71 @@
+﻿@page "/ListagemCandidato"
+@using FindE.Features.Candidato.Models
+@inject IToastService toastService
+@inject FindE.Features.Candidato.Services.CandidatoService candidatoService
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+
+<h3>ListagemCadastro</h3>
+
+@code {
+    IEnumerable<CandidatoModel> candidatos = new List<CandidatoModel>();
+    string filtroCandidato = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ListarCandidato();
+    }
+
+    private async Task ListarCandidato()
+    {
+        try
+        {
+            candidatos = await candidatoService.ListarCandidato();
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message, "Erro ao buscar candidatos");
+        }
+    }
+
+    private async void PesquisarCandidatos()
+    {
+        if (string.IsNullOrWhiteSpace(filtroCandidato))
+        {
+            await ListarCandidato();
+        }
+        else
+        {
+            candidatos = candidatos.Where(p => p.Estagiario.Nome.ToLower().Contains(filtroCandidato.ToLower())).ToList();
+        }
+    }
+
+    private void InserirCandidato()
+    {
+        navigationManager.NavigateTo("/CadastroCandidato");
+    }
+
+    private void AlterarCandidato(int IdCandidato)
+    {
+        navigationManager.NavigateTo($"/CadastroCandidato/{IdCandidato}");
+    }
+
+    private async Task ApagarCandidato(CandidatoModel candidato)
+    {
+        if (await jsRuntime.InvokeAsync<bool>("confirm", $"Excluir o candidato {candidato.Estagiario.Nome}?"))
+        {
+            string resposta = await jsRuntime.InvokeAsync<string>("prompt", $"Confirme o nome do candidato para excluir ({candidato.Estagiario.Nome}):");
+
+            if (candidato.Estagiario.Nome.Equals(resposta))
+            {
+                await candidatoService.ApagarCandidato(candidato);
+                toastService.ShowSuccess("Candidato apagado com sucesso", "Atenção");
+                await ListarCandidato();
+            }
+            else
+            {
+                await jsRuntime.InvokeVoidAsync("alert", @"O candidato informado não coincide com o estagiário cadastrado. Portanto ele não será excluído.");
+            }
+        }
+    }
+}

@@ -1,0 +1,63 @@
+﻿@page "/CadastroCandidato"
+@page "/CadastroCandidato/{IdCandidato:int}"
+@using FindE.Features.Candidato.Models
+@inject FindE.Features.Candidato.Services.CandidatoService candidatoService
+@inject NavigationManager navigationManager
+@inject IToastService toastService
+
+<h4 style="padding-bottom: 10px;">Cadastro de estagiario</h4>
+<EditForm Model="@Candidato" style="max-width: 250px;" class="row g-2" OnValidSubmit="GravarCandidato">
+    <div class="form-group">
+        <label for="txtDescricao">Descrição</label>
+        <textarea type="text" id="txtDescricao" class="form-control" @bind="@Candidato.Descricao" required />
+    </div>
+    <div class=""></div>
+    <div>
+        <div style="padding-top: 8px;" class="float-end">
+            <button type="reset" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int IdCandidato{ get; set; }
+    private CandidatoModel Candidato = new CandidatoModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (IdCandidato > 0)
+        {
+            Candidato = await candidatoService.RetornarCandidato(IdCandidato);
+        }
+    }
+
+    private async Task GravarCandidato()
+    {
+        try
+        {
+            if (IdCandidato > 0)
+            {
+                await candidatoService.AlterarCandidato(Candidato);
+                toastService.ShowSuccess("Candidato alterado com sucesso.", "Tudo ok!");
+            }
+            else
+            {
+                await candidatoService.InserirCandidato(Candidato);
+                toastService.ShowSuccess("Candidato inserido com sucesso.", "Tudo ok!");
+            }
+
+            navigationManager.NavigateTo("/ListagemCandidato");
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message, "Erro ao cadastrar candidato");
+        }
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/ListagemCandidato");
+    }
+}
