@@ -15,7 +15,6 @@ namespace FindE.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    IdEstagiario = table.Column<int>(type: "INTEGER", nullable: false),
                     EstagiarioId = table.Column<int>(type: "INTEGER", nullable: false),
                     DataDaCandidatura = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Descricao = table.Column<string>(type: "TEXT", nullable: false),
@@ -45,14 +44,14 @@ namespace FindE.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Nome = table.Column<string>(type: "TEXT", nullable: false),
                     Link = table.Column<string>(type: "TEXT", nullable: false),
-                    CandidatoModelId = table.Column<int>(type: "INTEGER", nullable: true)
+                    CandidatoId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CandidatoAnexo", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CandidatoAnexo_Candidato_CandidatoModelId",
-                        column: x => x.CandidatoModelId,
+                        name: "FK_CandidatoAnexo_Candidato_CandidatoId",
+                        column: x => x.CandidatoId,
                         principalTable: "Candidato",
                         principalColumn: "Id");
                 });

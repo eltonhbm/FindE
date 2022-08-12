@@ -64,9 +64,6 @@ namespace FindE.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("IdEstagiario")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("StatusFomacao")
                         .HasColumnType("INTEGER");
 

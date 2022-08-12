@@ -5,7 +5,6 @@ namespace FindE.Features.Candidato.Models
     public class CandidatoModel
     {
         public int Id { get; set; }
-        public int IdEstagiario { get; set; }
         public EstagiarioModel Estagiario { get; set; }
         public DateTime DataDaCandidatura  { get; set; }
         public string Descricao { get; set; }
@@ -17,5 +16,9 @@ namespace FindE.Features.Candidato.Models
         public string Whatsapp { get; set; }
         public List<CandidatoAnexo> Anexos { get; set; }
 
+        public CandidatoModel()
+        {
+            Anexos = new List<CandidatoAnexo>();
+        }
     }
 }

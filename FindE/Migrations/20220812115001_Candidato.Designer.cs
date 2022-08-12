@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FindE.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220809133303_Candidato")]
+    [Migration("20220812115001_Candidato")]
     partial class Candidato
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,9 +65,6 @@ namespace FindE.Migrations
                     b.Property<string>("FormacaoAcademica")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("IdEstagiario")
-                        .HasColumnType("INTEGER");
 
                     b.Property<int>("StatusFomacao")
                         .HasColumnType("INTEGER");
