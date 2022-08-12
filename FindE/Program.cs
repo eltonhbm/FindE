@@ -5,6 +5,7 @@ using FindE.Features.Conta.Services;
 using FindE.Features.Educador.Services;
 using FindE.Features.Estagiario.Services;
 using FindE.Features.Empresa.Services;
+using FindE.Features.Candidato.Services;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -20,6 +21,7 @@ builder.Services.AddScoped<ContaService>();
 builder.Services.AddScoped<EducadorService>();
 builder.Services.AddScoped<EmpresaService>();
 builder.Services.AddScoped<EstagiarioService>();
+builder.Services.AddScoped<CandidatoService>();
 
 var app = builder.Build();
 
