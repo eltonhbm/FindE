@@ -1,17 +1,41 @@
 ﻿@page "/CadastroCandidato"
-@page "/CadastroCandidato/{IdCandidato:int}"
+@page "/CadastroCandidato/{IdEstagiario:int}"
 @using FindE.Features.Candidato.Models
+@using FindE.Features.Estagiario.Models
 @inject FindE.Features.Candidato.Services.CandidatoService candidatoService
+@inject FindE.Features.Estagiario.Services.EstagiarioService estagiarioService
 @inject NavigationManager navigationManager
 @inject IToastService toastService
 
-<h4 style="padding-bottom: 10px;">Cadastro de estagiario</h4>
-<EditForm Model="@Candidato" style="max-width: 250px;" class="row g-2" OnValidSubmit="GravarCandidato">
+<h4 style="padding-bottom: 10px;">Cadastro do Candidato</h4>
+<EditForm Model="@Candidato" style="max-width: 350px;" class="row g-2" OnValidSubmit="GravarCandidato">
     <div class="form-group">
-        <label for="txtDescricao">Descrição</label>
+        <label for="NomeEstagiario">Estagiário:</label>
+        <input type="text" id="NomeEstagiario" class="form-control" readonly @bind="Estagiario.Nome">
+    </div>
+    <div class="form-group">
+        <label for="txtDescricao">Minha Descrição:</label>
         <textarea type="text" id="txtDescricao" class="form-control" @bind="@Candidato.Descricao" required />
     </div>
-    <div class=""></div>
+    <br />
+    <div class="form-group">
+        <label for="dataCandidatura">Data da Candidatura:</label>
+        <input type="datetime-local" id="example" class="form-control" @bind="@Candidato.DataDaCandidatura" required>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="FormacaoAcademica">Formação Acadêmica:</label>
+        <input type="text" id="FormacaoAcademica" class="form-control" @bind="@Candidato.FormacaoAcademica" required>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="dataFormacao">Data da Formação:</label>
+        <input type="date" id="dataFormacao" class="form-control" @bind="@Candidato.DataDaFormacao" required>
+    </div>
+    <div class="form-group">
+        <label for="Whatsapp">Whatsapp:</label>
+        <input type="tel" id="Whatsapp" class="form-control" readonly @bind="Estagiario.WhatsApp">
+    </div>
     <div>
         <div style="padding-top: 8px;" class="float-end">
             <button type="reset" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
@@ -22,11 +46,19 @@
 
 @code {
     [Parameter]
-    public int IdCandidato{ get; set; }
+    public int IdEstagiario { get; set; }
+    [Parameter]
+    public int IdCandidato { get; set; }
     private CandidatoModel Candidato = new CandidatoModel();
+    private EstagiarioModel Estagiario = new EstagiarioModel();
 
     protected override async Task OnInitializedAsync()
     {
+        if (IdEstagiario > 0)
+        {
+            Estagiario = await estagiarioService.RetornarEstagiario(IdEstagiario);
+        }
+
         if (IdCandidato > 0)
         {
             Candidato = await candidatoService.RetornarCandidato(IdCandidato);

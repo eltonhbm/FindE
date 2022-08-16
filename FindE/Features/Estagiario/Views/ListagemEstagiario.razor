@@ -2,6 +2,7 @@
 @using FindE.Features.Estagiario.Models
 @inject IToastService toastService
 @inject FindE.Features.Estagiario.Services.EstagiarioService estagiarioService
+@inject FindE.Features.Candidato.Services.CandidatoService candidatoService
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRuntime
 
@@ -39,7 +40,7 @@
                 @if (estagiarios.Any())
                 {
                     @foreach (var estagiario in estagiarios)
-                    {
+                        {
                         <tr>
                             <td class="align-middle">@estagiario.Id</td>
                             <td class="align-middle">@estagiario.Nome</td>
@@ -54,6 +55,9 @@
                                     </button>
                                     <button type="button" class="btn btn-danger btn-sm" title="Apagar estagiario" @onclick="() => ApagarEstagiario(estagiario)">
                                         <div class="bi bi-trash"></div>
+                                    </button>
+                                    <button type="button" class="btn btn-dark btn-sm" title="Adicionar candidato" @onclick="() => InserirCandidato(estagiario.Id)">
+                                        <div class="bi bi-person"></div>
                                     </button>
                                 </div>
                             </td>
@@ -114,6 +118,11 @@
     private void AlterarEstagiario(int IdEstagiario)
     {
         navigationManager.NavigateTo($"/CadastroEstagiario/{IdEstagiario}");
+    }
+
+    private void InserirCandidato(int IdEstagiario)
+    {
+        navigationManager.NavigateTo($"/CadastroCandidato/{IdEstagiario}");
     }
 
     private async Task ApagarEstagiario(EstagiarioModel estagiario)
