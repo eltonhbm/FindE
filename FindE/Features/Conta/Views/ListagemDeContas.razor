@@ -6,10 +6,10 @@
 @inject IJSRuntime jsRuntime
 
 <div>
-    <div class="container-fluid">
+    <div class="container-fluid" style="padding: 5px">
         <div class="row g-2">
             <div class="col-md-4">
-                <h4>Contas de acesso ao sistema</h4>
+                <h5>Contas de acesso ao sistema</h5>
             </div>
             <div class="col-md-4">
                 <input @bind=filtroConta onkeyup="if (event.keyCode == 13) document.getElementById('btnPesquisarConta').click()" type="text" class="form-control" placeholder="Usuário">
@@ -20,60 +20,60 @@
             <div class="col-md-2">
                 <button class="btn btn-success float-md-end" type="button" id="btnInserirConta" @onclick="() => InserirConta()">Inserir</button>
             </div>
-        </div>
-    </div>
-    <div class="table-responsive-sm" style="padding-top: 8px;">
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Usuário</th>
-                    <th class="thBadgeCustom">Perfil</th>
-                    <th><span class="float-sm-end">Ações</span></th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (contas.Any())
-                {
-                    @foreach (var conta in contas)
-                    {
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
                         <tr>
-                            <td class="align-middle">@conta.Id</td>
-                            <td class="align-middle">@conta.Usuario</td>
-                            @if ((int)conta.Perfil == 1)
-                            {
-                                <td class="tdBadgeCustom"><span class="badge bg-warning text-white">Empresa</span></td>
-                            }
-                            else if ((int)conta.Perfil == 2)
-                            {
-                                <td class="tdBadgeCustom"><span class="badge bg-success text-white">Estagiário</span></td>
-                            }
-                            else
-                            {
-                                <td class="tdBadgeCustom"><span class="badge bg-dark text-white">Administrador</span></td>
-                            }
-                            <td>
-                                <div class="float-sm-end">
-                                    <button type="button" class="btn btn-primary btn-sm" title="Alterar conta" @onclick="() => AlterarConta(conta.Id)">
-                                        <div class="bi bi-pencil"></div>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-sm" title="Apagar conta" @onclick="() => ApagarConta(conta)">
-                                        <div class="bi bi-trash"></div>
-                                    </button>
-                                </div>
-                            </td>
+                            <th>Id</th>
+                            <th>Usuário</th>
+                            <th class="thBadgeCustom">Perfil</th>
+                            <th><span class="float-sm-end">Ações</span></th>
                         </tr>
-                    }
-                }
-                else
-                {
-                    <tr><td colspan="4"><strong>Nenhuma conta cadastrada.</strong></td></tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <div>
-        <div class="hint-text">Exibindo <b>@contas.Count()</b> contas.</div>
+                    </thead>
+                    <tbody>
+                        @if (contas.Any())
+                        {
+                            @foreach (var conta in contas)
+                            {
+                                <tr>
+                                    <td class="align-middle">@conta.Id</td>
+                                    <td class="align-middle">@conta.Usuario</td>
+                                    @if ((int)conta.Perfil == 1)
+                                    {
+                                        <td class="tdBadgeCustom"><span class="badge bg-warning text-white">Empresa</span></td>
+                                    }
+                                    else if ((int)conta.Perfil == 2)
+                                    {
+                                        <td class="tdBadgeCustom"><span class="badge bg-success text-white">Estagiário</span></td>
+                                    }
+                                    else
+                                    {
+                                        <td class="tdBadgeCustom"><span class="badge bg-dark text-white">Administrador</span></td>
+                                    }
+                                    <td>
+                                        <div class="float-sm-end">
+                                            <button type="button" class="btn btn-primary btn-sm" title="Alterar conta" @onclick="() => AlterarConta(conta.Id)">
+                                                <div class="bi bi-pencil"></div>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm" title="Apagar conta" @onclick="() => ApagarConta(conta)">
+                                                <div class="bi bi-trash"></div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="4"><strong>Nenhuma conta cadastrada.</strong></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <div class="hint-text">Exibindo <b>@contas.Count()</b> contas.</div>
+        </div>
     </div>
 </div>
 

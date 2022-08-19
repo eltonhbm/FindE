@@ -1,7 +1,6 @@
 ﻿@page "/CadastroCandidato"
 @page "/CadastroCandidato/{IdEstagiario:int}"
 @using FindE.Features.Candidato.Models
-@using FindE.Features.Estagiario.Models
 @inject FindE.Features.Candidato.Services.CandidatoService candidatoService
 @inject FindE.Features.Estagiario.Services.EstagiarioService estagiarioService
 @inject NavigationManager navigationManager
@@ -11,7 +10,7 @@
 <EditForm Model="@Candidato" style="max-width: 350px;" class="row g-2" OnValidSubmit="GravarCandidato">
     <div class="form-group">
         <label for="NomeEstagiario">Estagiário:</label>
-        <input type="text" id="NomeEstagiario" class="form-control" readonly @bind="Estagiario.Nome">
+        <input type="text" id="NomeEstagiario" class="form-control" readonly @bind="Candidato.Estagiario.Nome">
     </div>
     <div class="form-group">
         <label for="txtDescricao">Minha Descrição:</label>
@@ -20,7 +19,7 @@
     <br />
     <div class="form-group">
         <label for="dataCandidatura">Data da Candidatura:</label>
-        <input type="datetime-local" id="example" class="form-control" @bind="@Candidato.DataDaCandidatura" required>
+        <input type="date" id="dataCandidatura" class="form-control" @bind="@Candidato.DataDaCandidatura" required>
     </div>
     <br />
     <div class="form-group">
@@ -34,7 +33,7 @@
     </div>
     <div class="form-group">
         <label for="Whatsapp">Whatsapp:</label>
-        <input type="tel" id="Whatsapp" class="form-control" readonly @bind="Estagiario.WhatsApp">
+        <input type="tel" id="Whatsapp" class="form-control" readonly @bind="Candidato.Estagiario.WhatsApp">
     </div>
     <div>
         <div style="padding-top: 8px;" class="float-end">
@@ -50,13 +49,14 @@
     [Parameter]
     public int IdCandidato { get; set; }
     private CandidatoModel Candidato = new CandidatoModel();
-    private EstagiarioModel Estagiario = new EstagiarioModel();
 
     protected override async Task OnInitializedAsync()
     {
+        Candidato.DataDaCandidatura = DateTime.Now;
+
         if (IdEstagiario > 0)
         {
-            Estagiario = await estagiarioService.RetornarEstagiario(IdEstagiario);
+            Candidato.Estagiario = await estagiarioService.RetornarEstagiario(IdEstagiario);
         }
 
         if (IdCandidato > 0)
@@ -82,14 +82,14 @@
 
             navigationManager.NavigateTo("/ListagemCandidato");
         }
-        catch (Exception ex)
+        catch
         {
-            toastService.ShowError(ex.Message, "Erro ao cadastrar candidato");
+            toastService.ShowError(Candidato.Mensagem, "Erro ao cadastrar candidato");
         }
     }
 
     private void Cancelar()
     {
-        navigationManager.NavigateTo("/ListagemCandidato");
+        navigationManager.NavigateTo("/ListagemEstagiario");
     }
 }

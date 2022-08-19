@@ -17,35 +17,14 @@ namespace FindE.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.6");
 
-            modelBuilder.Entity("FindE.Features.Candidato.Models.CandidatoAnexo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("CandidatoModelId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Link")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CandidatoModelId");
-
-                    b.ToTable("CandidatoAnexo");
-                });
-
             modelBuilder.Entity("FindE.Features.Candidato.Models.CandidatoModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Anexo")
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DataDaCandidatura")
                         .HasColumnType("TEXT");
@@ -61,22 +40,15 @@ namespace FindE.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FormacaoAcademica")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("StatusFomacao")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("UsuarioGitHub")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("UsuarioInstagram")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Whatsapp")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -193,13 +165,6 @@ namespace FindE.Migrations
                     b.ToTable("Estagiario");
                 });
 
-            modelBuilder.Entity("FindE.Features.Candidato.Models.CandidatoAnexo", b =>
-                {
-                    b.HasOne("FindE.Features.Candidato.Models.CandidatoModel", null)
-                        .WithMany("Anexos")
-                        .HasForeignKey("CandidatoModelId");
-                });
-
             modelBuilder.Entity("FindE.Features.Candidato.Models.CandidatoModel", b =>
                 {
                     b.HasOne("FindE.Features.Estagiario.Models.EstagiarioModel", "Estagiario")
@@ -209,11 +174,6 @@ namespace FindE.Migrations
                         .IsRequired();
 
                     b.Navigation("Estagiario");
-                });
-
-            modelBuilder.Entity("FindE.Features.Candidato.Models.CandidatoModel", b =>
-                {
-                    b.Navigation("Anexos");
                 });
 #pragma warning restore 612, 618
         }

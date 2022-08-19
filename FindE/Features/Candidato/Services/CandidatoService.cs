@@ -33,8 +33,9 @@ namespace FindE.Features.Candidato.Services
                 dbContext.Candidato.Add(candidato);
                 await dbContext.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                candidato.Mensagem = ex.InnerException.Message;
                 throw;
             }
 
