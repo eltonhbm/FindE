@@ -8,84 +8,81 @@ namespace FindE.Features.Candidato.Services
     public class CandidatoService
     {
         private AppDbContext dbContext;
-        public class CandidatoServices
+
+        public CandidatoService(AppDbContext dbContext)
         {
-            private AppDbContext dbContext;
+            this.dbContext = dbContext;
+        }
 
-            public CandidatoServices(AppDbContext dbContext)
+        public async Task<List<CandidatoModel>> ListarCandidato()
+        {
+            try
             {
-                this.dbContext = dbContext;
+                return await dbContext.Candidato.Include(e => e.Estagiario).ToListAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<CandidatoModel> InserirCandidato(CandidatoModel candidato)
+        {
+            try
+            {
+                dbContext.Candidato.Add(candidato);
+                await dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                candidato.Mensagem = ex.InnerException.Message;
+                throw;
             }
 
-            public async Task<List<CandidatoModel>> ListarCandidato()
-            {
-                try
-                {
-                    return await dbContext.Candidato.ToListAsync();
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
+            return candidato;
+        }
 
-            public async Task<CandidatoModel> InserirCandidato(CandidatoModel candidato)
+        public async Task<CandidatoModel> AlterarCandidato(CandidatoModel candidato)
+        {
+            try
             {
-                try
+                if (dbContext.Candidato.FirstOrDefault(c => c.Id == candidato.Id) != null)
                 {
-                    dbContext.Candidato.Add(candidato);
+                    dbContext.Candidato.Update(candidato);
                     await dbContext.SaveChangesAsync();
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
-
-                return candidato;
+            }
+            catch (Exception)
+            {
+                throw;
             }
 
-            public async Task<CandidatoModel> AlterarCandidato(CandidatoModel candidato)
-            {
-                try
-                {
-                    if (dbContext.Candidato.FirstOrDefault(c => c.Id == candidato.Id) != null)
-                    {
-                        dbContext.Candidato.Update(candidato);
-                        await dbContext.SaveChangesAsync();
-                    }
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+            return candidato;
+        }
 
-                return candidato;
+        public async Task ApagarCandidato(CandidatoModel candidato)
+        {
+            try
+            {
+                dbContext.Candidato.Remove(candidato);
+                await dbContext.SaveChangesAsync();
             }
-
-            public async Task ApagarCandidato(CandidatoModel candidato)
+            catch (Exception)
             {
-                try
-                {
-                    dbContext.Candidato.Remove(candidato);
-                    await dbContext.SaveChangesAsync();
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+                throw;
             }
+        }
 
-            public async Task<CandidatoModel> RetornarCandidato(int IdCandidato)
+        public async Task<CandidatoModel> RetornarCandidato(int IdCandidato)
+        {
+            try
             {
-                try
-                {
-                    var candidato = await dbContext.Candidato.Where(c => c.Id == IdCandidato).ToListAsync();
-                    return candidato.Single();
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
+                var candidato = await dbContext.Candidato.Where(c => c.Id == IdCandidato).ToListAsync();
+                return candidato.Single();
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }

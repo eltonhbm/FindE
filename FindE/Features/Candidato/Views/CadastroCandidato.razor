@@ -1,0 +1,95 @@
+﻿@page "/CadastroCandidato"
+@page "/CadastroCandidato/{IdEstagiario:int}"
+@using FindE.Features.Candidato.Models
+@inject FindE.Features.Candidato.Services.CandidatoService candidatoService
+@inject FindE.Features.Estagiario.Services.EstagiarioService estagiarioService
+@inject NavigationManager navigationManager
+@inject IToastService toastService
+
+<h4 style="padding-bottom: 10px;">Cadastro do Candidato</h4>
+<EditForm Model="@Candidato" style="max-width: 350px;" class="row g-2" OnValidSubmit="GravarCandidato">
+    <div class="form-group">
+        <label for="NomeEstagiario">Estagiário:</label>
+        <input type="text" id="NomeEstagiario" class="form-control" readonly @bind="Candidato.Estagiario.Nome">
+    </div>
+    <div class="form-group">
+        <label for="txtDescricao">Minha Descrição:</label>
+        <textarea type="text" id="txtDescricao" class="form-control" @bind="@Candidato.Descricao" required />
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="dataCandidatura">Data da Candidatura:</label>
+        <input type="date" id="dataCandidatura" class="form-control" @bind="@Candidato.DataDaCandidatura" required>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="FormacaoAcademica">Formação Acadêmica:</label>
+        <input type="text" id="FormacaoAcademica" class="form-control" @bind="@Candidato.FormacaoAcademica" required>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="dataFormacao">Data da Formação:</label>
+        <input type="date" id="dataFormacao" class="form-control" @bind="@Candidato.DataDaFormacao" required>
+    </div>
+    <div class="form-group">
+        <label for="Whatsapp">Whatsapp:</label>
+        <input type="tel" id="Whatsapp" class="form-control" readonly @bind="Candidato.Estagiario.WhatsApp">
+    </div>
+    <div>
+        <div style="padding-top: 8px;" class="float-end">
+            <button type="reset" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int IdEstagiario { get; set; }
+    [Parameter]
+    public int IdCandidato { get; set; }
+    private CandidatoModel Candidato = new CandidatoModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Candidato.DataDaCandidatura = DateTime.Now;
+
+        if (IdEstagiario > 0)
+        {
+            Candidato.Estagiario = await estagiarioService.RetornarEstagiario(IdEstagiario);
+        }
+
+        if (IdCandidato > 0)
+        {
+            Candidato = await candidatoService.RetornarCandidato(IdCandidato);
+        }
+    }
+
+    private async Task GravarCandidato()
+    {
+        try
+        {
+            if (IdCandidato > 0)
+            {
+                await candidatoService.AlterarCandidato(Candidato);
+                toastService.ShowSuccess("Candidato alterado com sucesso.", "Tudo ok!");
+            }
+            else
+            {
+                await candidatoService.InserirCandidato(Candidato);
+                toastService.ShowSuccess("Candidato inserido com sucesso.", "Tudo ok!");
+            }
+
+            navigationManager.NavigateTo("/ListagemCandidato");
+        }
+        catch
+        {
+            toastService.ShowError(Candidato.Mensagem, "Erro ao cadastrar candidato");
+        }
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/ListagemEstagiario");
+    }
+}
