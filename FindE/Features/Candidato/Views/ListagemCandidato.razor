@@ -25,6 +25,7 @@
                     <thead>
                         <tr>
                             <th>Id</th>
+                            <th>Nome</th>
                             <th>Data Candidatura</th>
                             <th>Formação Acadêmica</th>
                             <th>Status da Formação</th>
@@ -43,12 +44,14 @@
                             {
                                 <tr>
                                     <td class="align-middle">@candidato.Id</td>
+                                    <td class="align-middle">@candidato.Estagiario.Nome</td>
                                     <td class="align-middle">@candidato.DataDaCandidatura</td>
                                     <td class="align-middle">@candidato.FormacaoAcademica</td>
                                     <td class="align-middle">@candidato.StatusFomacao</td>
                                     <td class="align-middle">@candidato.DataDaFormacao</td>
                                     <td class="align-middle">@candidato.UsuarioGitHub</td>
                                     <td class="align-middle">@candidato.UsuarioInstagram</td>
+                                    <td class="align-middle">@candidato.Estagiario.WhatsApp</td>
                                     <td class="align-middle">@candidato.Anexo</td>
                                     <td>
                                         <div class="float-sm-end">
@@ -66,7 +69,7 @@
                         }
                         else
                         {
-                            <tr><td colspan="8"><strong>Nenhum candidato cadastrado.</strong></td></tr>
+                            <tr><td colspan="11"><strong>Nenhum candidato cadastrado.</strong></td></tr>
                         }
                     </tbody>
                 </table>
@@ -118,7 +121,7 @@
 
     private void AlterarCandidato(int IdCandidato)
     {
-        navigationManager.NavigateTo($"/CadastroCandidato/{IdCandidato}");
+        navigationManager.NavigateTo($"/CadastroCandidato/0/{IdCandidato}");
     }
 
     private async Task ApagarCandidato(CandidatoModel candidato)
