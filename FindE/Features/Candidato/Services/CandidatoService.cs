@@ -1,4 +1,4 @@
-﻿using FindE.Data;
+﻿ using FindE.Data;
 using FindE.Features.Candidato.Models;
 using Microsoft.EntityFrameworkCore;
 
