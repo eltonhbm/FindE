@@ -19,7 +19,7 @@
     <br />
     <div class="form-group">
         <label for="HoraEntrada">Horario entrada:</label>
-        <input type="date" id="HoraEntrada" class="form-control" @bind="@Vaga.DataDaCandidatura" required>
+        <input type="date" id="HoraEntrada" class="form-control" @bind="@Vaga.DataDaVaga" required>
     </div>
     <br />
     <div class="form-group">
@@ -44,7 +44,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Vaga.DataDaCandidatura = DateTime.Now;
+        Vaga.DataDaVaga = DateTime.Now;
 
         if (IdEmpresa > 0)
         {

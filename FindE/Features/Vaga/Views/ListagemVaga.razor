@@ -9,7 +9,7 @@
     <div class="container-fluid" style="padding: 5px">
         <div class="row g-2">
             <div class="col-md-4">
-                <h4>Vagas cadastrados</h4>
+                <h4>Vagas cadastradas</h4>
             </div>
             <div class="col-md-4">
                 <input @bind=filtroVaga onkeyup="if (event.keyCode == 13) document.getElementById('btnPesquisarVaga').click()" type="text" class="form-control" placeholder="Nome">
@@ -25,13 +25,10 @@
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Data Candidatura</th>
-                            <th>Formação Acadêmica</th>
-                            <th>Status da Formação</th>
-                            <th>Data da Formação</th>
-                            <th>Usuário GitHub</th>
-                            <th>Usuário Instagram</th>
-                            <th>Whatsapp</th>
+                            <th>Data de Abertura da Vaga</th>
+                            <th>Descrição</th>
+                            <th>Hora Entrada</th>
+                            <th>Hora Saída</th>
                             <th>Anexos</th>
                             <th><span class="float-sm-end">Ações</span></th>
                         </tr>
@@ -43,12 +40,10 @@
                             {
                                 <tr>
                                     <td class="align-middle">@Vaga.Id</td>
-                                    <td class="align-middle">@Vaga.DataDaCandidatura</td>
-                                    <td class="align-middle">@Vaga.FormacaoAcademica</td>
-                                    <td class="align-middle">@Vaga.StatusFomacao</td>
-                                    <td class="align-middle">@Vaga.DataDaFormacao</td>
-                                    <td class="align-middle">@Vaga.UsuarioGitHub</td>
-                                    <td class="align-middle">@Vaga.UsuarioInstagram</td>
+                                    <td class="align-middle">@Vaga.DataDeAberturaDaVaga</td>
+                                    <td class="align-middle">@Vaga.Descricao</td>
+                                    <td class="align-middle">@Vaga.HoraEntrada</td>
+                                    <td class="align-middle">@Vaga.HoraSaida</td>
                                     <td class="align-middle">@Vaga.Anexo</td>
                                     <td>
                                         <div class="float-sm-end">
@@ -66,7 +61,7 @@
                         }
                         else
                         {
-                            <tr><td colspan="8"><strong>Nenhum Vaga cadastrado.</strong></td></tr>
+                            <tr><td colspan="8"><strong>Nenhuma Vaga cadastrada.</strong></td></tr>
                         }
                     </tbody>
                 </table>
@@ -107,7 +102,7 @@
         }
         else
         {
-            Vagas = Vagas.Where(p => p.Estagiario.Nome.ToLower().Contains(filtroVaga.ToLower())).ToList();
+            Vagas = Vagas.Where(p => p.Empresa.Nome.ToLower().Contains(filtroVaga.ToLower())).ToList();
         }
     }
 
@@ -123,19 +118,19 @@
 
     private async Task ApagarVaga(VagaModel Vaga)
     {
-        if (await jsRuntime.InvokeAsync<bool>("confirm", $"Excluir o Vaga {Vaga.Estagiario.Nome}?"))
+        if (await jsRuntime.InvokeAsync<bool>("confirm", $"Excluir o Vaga {Vaga.Empresa.Nome}?"))
         {
-            string resposta = await jsRuntime.InvokeAsync<string>("prompt", $"Confirme o nome do Vaga para excluir ({Vaga.Estagiario.Nome}):");
+            string resposta = await jsRuntime.InvokeAsync<string>("prompt", $"Confirme o nome da Vaga para excluir ({Vaga.Empresa.Nome}):");
 
-            if (Vaga.Estagiario.Nome.Equals(resposta))
+            if (Vaga.Empresa.Nome.Equals(resposta))
             {
                 await VagaService.ApagarVaga(Vaga);
-                toastService.ShowSuccess("Vaga apagado com sucesso", "Atenção");
+                toastService.ShowSuccess("Vaga apagada com sucesso", "Atenção");
                 await ListarVaga();
             }
             else
             {
-                await jsRuntime.InvokeVoidAsync("alert", @"O Vaga informado não coincide com o estagiário cadastrado. Portanto ele não será excluído.");
+                await jsRuntime.InvokeVoidAsync("alert", @"A Vaga informada não coincide com o vaga cadastrada. Portanto ela não será excluído.");
             }
         }
     }
