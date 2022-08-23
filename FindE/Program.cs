@@ -3,6 +3,7 @@ using FindE.Data;
 using FindE.Features.Cep.Services;
 using FindE.Features.Conta.Services;
 using FindE.Features.Educador.Services;
+using FindE.Features.Vaga.Services;
 using FindE.Features.Estagiario.Services;
 using FindE.Features.Empresa.Services;
 using FindE.Features.Candidato.Services;
@@ -22,6 +23,7 @@ builder.Services.AddScoped<EducadorService>();
 builder.Services.AddScoped<EmpresaService>();
 builder.Services.AddScoped<EstagiarioService>();
 builder.Services.AddScoped<CandidatoService>();
+builder.Services.AddScoped<VagaService>();
 
 var app = builder.Build();
 

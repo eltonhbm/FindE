@@ -1,0 +1,137 @@
+﻿@page "/ListagemVaga"
+@using FindE.Features.Vaga.Models
+@inject IToastService toastService
+@inject FindE.Features.Vaga.Services.VagaService VagaService
+@inject NavigationManager navigationManager
+@inject IJSRuntime jsRuntime
+
+<div>
+    <div class="container-fluid" style="padding: 5px">
+        <div class="row g-2">
+            <div class="col-md-4">
+                <h4>Vagas cadastradas</h4>
+            </div>
+            <div class="col-md-4">
+                <input @bind=filtroVaga onkeyup="if (event.keyCode == 13) document.getElementById('btnPesquisarVaga').click()" type="text" class="form-control" placeholder="Nome">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-outline-primary" type="button" id="btnPesquisarVaga" @onclick="() => PesquisarVagas()">Pesquisar</button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-success float-md-end" type="button" @onclick="() => InserirVaga()">Inserir</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Data de Abertura da Vaga</th>
+                            <th>Descrição</th>
+                            <th>Hora Entrada</th>
+                            <th>Hora Saída</th>
+                            <th>Anexos</th>
+                            <th><span class="float-sm-end">Ações</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Vagas.Any())
+                        {
+                            @foreach (var Vaga in Vagas)
+                            {
+                                <tr>
+                                    <td class="align-middle">@Vaga.Id</td>
+                                    <td class="align-middle">@Vaga.DataDeAberturaDaVaga</td>
+                                    <td class="align-middle">@Vaga.Descricao</td>
+                                    <td class="align-middle">@Vaga.HoraEntrada</td>
+                                    <td class="align-middle">@Vaga.HoraSaida</td>
+                                    <td class="align-middle">@Vaga.Anexo</td>
+                                    <td>
+                                        <div class="float-sm-end">
+                                            <button type="button" class="btn btn-primary btn-sm" title="Alterar Vaga" @onclick="() => AlterarVaga(Vaga.Id)">
+                                                <div class="bi bi-pencil"></div>
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm" title="Apagar Vaga" @onclick="() => ApagarVaga(Vaga)">
+                                                <div class="bi bi-trash"></div>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="8"><strong>Nenhuma Vaga cadastrada.</strong></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <div class="hint-text">Exibindo <b>@Vagas.Count()</b> Vagas.</div>
+        </div>
+    </div>
+</div>
+
+@code {
+    IEnumerable<VagaModel> Vagas = new List<VagaModel>();
+    string filtroVaga = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ListarVaga();
+    }
+
+    private async Task ListarVaga()
+    {
+        try
+        {
+            Vagas = await VagaService.ListarVaga();
+        }
+        catch (Exception ex)
+        {
+            toastService.ShowError(ex.Message, "Erro ao buscar Vagas");
+        }
+    }
+
+    private async void PesquisarVagas()
+    {
+        if (string.IsNullOrWhiteSpace(filtroVaga))
+        {
+            await ListarVaga();
+        }
+        else
+        {
+            Vagas = Vagas.Where(p => p.Empresa.Nome.ToLower().Contains(filtroVaga.ToLower())).ToList();
+        }
+    }
+
+    private void InserirVaga()
+    {
+        navigationManager.NavigateTo("/CadastroVaga");
+    }
+
+    private void AlterarVaga(int IdVaga)
+    {
+        navigationManager.NavigateTo($"/CadastroVaga/0/{IdVaga}");
+    }
+
+    private async Task ApagarVaga(VagaModel Vaga)
+    {
+        if (await jsRuntime.InvokeAsync<bool>("confirm", $"Excluir o Vaga {Vaga.Empresa.Nome}?"))
+        {
+            string resposta = await jsRuntime.InvokeAsync<string>("prompt", $"Confirme o nome da Vaga para excluir ({Vaga.Empresa.Nome}):");
+
+            if (Vaga.Empresa.Nome.Equals(resposta))
+            {
+                await VagaService.ApagarVaga(Vaga);
+                toastService.ShowSuccess("Vaga apagada com sucesso", "Atenção");
+                await ListarVaga();
+            }
+            else
+            {
+                await jsRuntime.InvokeVoidAsync("alert", @"A Vaga informada não coincide com o vaga cadastrada. Portanto ela não será excluído.");
+            }
+        }
+    }
+}

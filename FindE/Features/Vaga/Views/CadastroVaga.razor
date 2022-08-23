@@ -1,0 +1,87 @@
+﻿@page "/CadastroVaga"
+@page "/CadastroVaga/{IdEmpresa:int}/{IdVaga:int}"
+@using FindE.Features.Vaga.Models
+@inject FindE.Features.Vaga.Services.VagaService VagaService
+@inject FindE.Features.Empresa.Services.EmpresaService EmpresaService
+@inject NavigationManager navigationManager
+@inject IToastService toastService
+
+<h4 style="padding-bottom: 10px;">Cadastro de Vagas</h4>
+<EditForm Model="@Vaga" style="max-width: 350px;" class="row g-2" OnValidSubmit="GravarVaga">
+    <div class="form-group">
+        <label for="DatadeAberturadaVaga">Data de abertura da vaga:</label>
+        <input type="text" id="DatadeAberturadaVaga" class="form-control" readonly @bind="Vaga.Empresa.Nome">
+    </div>
+    <div class="form-group">
+        <label for="txtDescricao">Descrição:</label>
+        <textarea type="text" id="txtDescricao" class="form-control" @bind="@Vaga.Descricao" required />
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="HoraEntrada">Horario entrada:</label>
+        <input type="date" id="HoraEntrada" class="form-control" @bind="@Vaga.HoraEntrada" required>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="HoraSaida">Horario saida:</label>
+        <input type="text" id="HoraSaida" class="form-control" @bind="@Vaga.HoraSaida" required>
+    </div>
+    <br />
+    <div>
+        <div style="padding-top: 8px;" class="float-end">
+            <button type="reset" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int IdEmpresa { get; set; }
+    [Parameter]
+    public int IdVaga { get; set; }
+    private VagaModel Vaga = new VagaModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Vaga.DataDeAberturaDaVaga = DateTime.Now;
+
+        if (IdEmpresa > 0)
+        {
+            Vaga.Empresa = await EmpresaService.RetornarEmpresa(IdEmpresa);
+        }
+
+        if (IdVaga > 0)
+        {
+            Vaga = await VagaService.RetornarVaga(IdVaga);
+        }
+    }
+
+    private async Task GravarVaga()
+    {
+        try
+        {
+            if (IdVaga > 0)
+            {
+                await VagaService.AlterarVaga(Vaga);
+                toastService.ShowSuccess("Vaga alterada com sucesso.", "Tudo ok!");
+            }
+            else
+            {
+                await VagaService.InserirVaga(Vaga);
+                toastService.ShowSuccess("Vaga inserida com sucesso.", "Tudo ok!");
+            }
+
+            navigationManager.NavigateTo("/ListagemVaga");
+        }
+        catch
+        {
+            toastService.ShowError(Vaga.Mensagem, "Erro ao cadastrar Vaga");
+        }
+    }
+
+    private void Cancelar()
+    {
+        navigationManager.NavigateTo("/ListagemVaga");
+    }
+}

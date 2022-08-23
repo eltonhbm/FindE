@@ -1,6 +1,7 @@
 ﻿@page "/ListagemEmpresa"
 @using FindE.Features.Empresa.Models
 @inject FindE.Features.Empresa.Services.EmpresaService empresaService
+@inject FindE.Features.Vaga.Services.VagaService vagaService
 @inject IToastService toastService
 @inject NavigationManager navigationManager
 @inject IJSRuntime jsRuntime
@@ -8,20 +9,20 @@
 <div>
     <div class="container-fluid" style="padding: 5px">
         <div class="row g-2">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <h5>Empresas que estão cadastradas</h5>
             </div>
-            <div class="col-md-2" style="padding-right: 2px">
-                <input onkeyup="if (event.keyCode == 13) document.getElementById('btnPesquisarEmpresa').click()" type="text" class="form-control" placeholder="Empresas">
+            <div class="col-md-4" style="padding-right: 2px">
+                <input @bind=filtroEmpresa onkeyup="if (event.keyCode == 13) document.getElementById('btnPesquisarEmpresa').click()" type="text" class="form-control" placeholder="Empresas">
             </div>
             <div class="col-md-2">
-                <button class="btn btn-outline-primary" type="button" id="btnPesquisarEmpresa">Pesquisar</button>
+                <button class="btn btn-outline-primary" type="button" id="btnPesquisarEmpresa" @onclick="() => PesquisarNaListagem()">Pesquisar</button>
             </div>
             <div class="col-md-2">
-                <a href="CadastroEmpresa"><button class="btn btn-success float-md-end" type="button" id="btnInserirEmpresa">Inserir</button></a>
+                <button class="btn btn-success float-md-end" type="button" @onclick="() => InserirEmpresa()">Inserir</button>
             </div>
             <div class="table-responsive">
-                <table class="table table-responsive-sm table-striped table-hover">
+                <table class="table table-striped table-hover">
                     <thead>
                         <tr>
                             <th>Id</th>
@@ -50,6 +51,9 @@
                                             </button>
                                             <button type="button" class="btn btn-danger btn-sm" title="Apagar empresa" @onclick="() => ApagarEmpresa(empresa)">
                                                 <div class="bi bi-trash"></div>
+                                            </button>
+                                            <button type="button" class="btn btn-dark btn-sm" title="Adicionar candidato" @onclick="() => InserirVaga(empresa.Id)">
+                                                <div class="bi bi-person"></div>
                                             </button>
                                         </div>
                                     </td>
@@ -111,6 +115,11 @@
     private void AlterarEmpresa(int IdEmpresa)
     {
         navigationManager.NavigateTo($"/CadastroEmpresa/{IdEmpresa}");
+    }
+    
+    private void InserirVaga(int IdEmpresa)
+    {
+        navigationManager.NavigateTo($"/CadastroVaga/{IdEmpresa}/0");
     }
 
     private async Task ApagarEmpresa(EmpresaModel empresa)
