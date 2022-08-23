@@ -1,5 +1,5 @@
 ﻿@page "/CadastroCandidato"
-@page "/CadastroCandidato/{IdEstagiario:int}"
+@page "/CadastroCandidato/{IdEstagiario:int}/{IdCandidato:int}"
 @using FindE.Features.Candidato.Models
 @inject FindE.Features.Candidato.Services.CandidatoService candidatoService
 @inject FindE.Features.Estagiario.Services.EstagiarioService estagiarioService
@@ -30,6 +30,14 @@
     <div class="form-group">
         <label for="dataFormacao">Data da Formação:</label>
         <input type="date" id="dataFormacao" class="form-control" @bind="@Candidato.DataDaFormacao" required>
+    </div>
+    <div class="form-group">
+        <label for="UsuarioGitHub">Usuario do Git Hub:</label>
+        <input type="text" id="UsuarioGitHub" class="form-control" @bind="Candidato.UsuarioGitHub">
+    </div>
+    <div class="form-group">
+        <label for="UsuarioInstagram">Usuario do Instagram:</label>
+        <input type="text" id="UsuarioInstagram" class="form-control" @bind="Candidato.UsuarioInstagram">
     </div>
     <div class="form-group">
         <label for="Whatsapp">Whatsapp:</label>
@@ -90,6 +98,6 @@
 
     private void Cancelar()
     {
-        navigationManager.NavigateTo("/ListagemEstagiario");
+        navigationManager.NavigateTo("/ListagemCandidato");
     }
 }
