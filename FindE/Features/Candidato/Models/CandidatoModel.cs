@@ -18,5 +18,10 @@ namespace FindE.Features.Candidato.Models
 
         [NotMapped]
         public string Mensagem { get; set; }
+
+        public CandidatoModel()
+        {
+            Estagiario = new EstagiarioModel();
+        }
     }
 }

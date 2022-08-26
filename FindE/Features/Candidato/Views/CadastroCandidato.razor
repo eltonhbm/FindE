@@ -1,6 +1,7 @@
 ﻿@page "/CadastroCandidato"
 @page "/CadastroCandidato/{IdEstagiario:int}/{IdCandidato:int}"
 @using FindE.Features.Candidato.Models
+@using FindE.Features.Estagiario.Models
 @inject FindE.Features.Candidato.Services.CandidatoService candidatoService
 @inject FindE.Features.Estagiario.Services.EstagiarioService estagiarioService
 @inject NavigationManager navigationManager
@@ -8,10 +9,25 @@
 
 <h4 style="padding-bottom: 10px;">Cadastro do Candidato</h4>
 <EditForm Model="@Candidato" style="max-width: 350px;" class="row g-2" OnValidSubmit="GravarCandidato">
-    <div class="form-group">
-        <label for="NomeEstagiario">Estagiário:</label>
-        <input type="text" id="NomeEstagiario" class="form-control" readonly @bind="Candidato.Estagiario.Nome">
-    </div>
+    @if (IdEstagiario > 0)
+    {
+        <div class="form-group">
+            <label for="NomeEstagiario">Estagiário:</label>
+            <input type="text" id="NomeEstagiario" class="form-control" readonly @bind="Candidato.Estagiario.Nome">
+        </div>
+
+    }
+    else
+    {
+        <BlazoredTypeahead MinimumLength="2" MaximumSuggestions="5" SearchMethod="PesquisarEstagiario" Debounce="500"
+            TValue="EstagiarioModel" TItem="EstagiarioModel" Value="Estagiario" 
+            ValueChanged="SelecionarEstagiario">
+            <HelpTemplate>
+                Pesquise um estagiário.
+            </HelpTemplate>
+
+        </BlazoredTypeahead>
+    }
     <div class="form-group">
         <label for="txtDescricao">Minha Descrição:</label>
         <textarea type="text" id="txtDescricao" class="form-control" @bind="@Candidato.Descricao" required />
@@ -39,15 +55,23 @@
         <label for="UsuarioInstagram">Usuario do Instagram:</label>
         <input type="text" id="UsuarioInstagram" class="form-control" @bind="Candidato.UsuarioInstagram">
     </div>
-    <div class="form-group">
-        <label for="Whatsapp">Whatsapp:</label>
-        <input type="tel" id="Whatsapp" class="form-control" readonly @bind="Candidato.Estagiario.WhatsApp">
-    </div>
-    <div>
-        <div style="padding-top: 8px;" class="float-end">
-            <button type="reset" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
-            <button type="submit" class="btn btn-success">Salvar</button>
+    @if (IdEstagiario > 0)
+    {
+        <div class="form-group">
+            <label for="Whatsapp">Whatsapp:</label>
+            <input type="tel" id="Whatsapp" class="form-control" readonly @bind="Candidato.Estagiario.WhatsApp">
         </div>
+    }
+    else
+    {
+        <div class="form-group">
+            <label for="Whatsapp">Whatsapp:</label>
+            <input type="tel" id="Whatsapp" class="form-control" @bind="Candidato.Estagiario.WhatsApp">
+        </div>
+    }
+    <div style="padding-top: 8px;" class="float-end">
+        <button type="reset" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+        <button type="submit" class="btn btn-success">Salvar</button>
     </div>
 </EditForm>
 
@@ -57,6 +81,7 @@
     [Parameter]
     public int IdCandidato { get; set; }
     private CandidatoModel Candidato = new CandidatoModel();
+    string filtroNomeEstagiario = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -71,6 +96,16 @@
         {
             Candidato = await candidatoService.RetornarCandidato(IdCandidato);
         }
+    }
+
+    private async Task<IEnumerable<EstagiarioModel>> PesquisarEstagiario(string filtro)
+    {
+        return await new List<EstagiarioModel>();
+    }
+
+    private void SelecionarEstagiario(EstagiarioModel estagiario)
+    {
+
     }
 
     private async Task GravarCandidato()
