@@ -25,6 +25,7 @@
                     <thead>
                         <tr>
                             <th>Id</th>
+                            <th>Empresa</th>
                             <th>Data de Abertura da Vaga</th>
                             <th>Descrição</th>
                             <th>Hora Entrada</th>
@@ -40,6 +41,7 @@
                             {
                                 <tr>
                                     <td class="align-middle">@Vaga.Id</td>
+                                    <td class="align-middle">@Vaga.Empresa.Nome</td>
                                     <td class="align-middle">@Vaga.DataDeAberturaDaVaga</td>
                                     <td class="align-middle">@Vaga.Descricao</td>
                                     <td class="align-middle">@Vaga.HoraEntrada</td>
@@ -61,7 +63,7 @@
                         }
                         else
                         {
-                            <tr><td colspan="8"><strong>Nenhuma Vaga cadastrada.</strong></td></tr>
+                            <tr><td colspan="9"><strong>Nenhuma Vaga cadastrada.</strong></td></tr>
                         }
                     </tbody>
                 </table>

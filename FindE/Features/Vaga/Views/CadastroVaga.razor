@@ -1,16 +1,45 @@
 ﻿@page "/CadastroVaga"
 @page "/CadastroVaga/{IdEmpresa:int}/{IdVaga:int}"
 @using FindE.Features.Vaga.Models
+@using FindE.Features.Empresa.Models
+@using System.Linq
 @inject FindE.Features.Vaga.Services.VagaService VagaService
-@inject FindE.Features.Empresa.Services.EmpresaService EmpresaService
+@inject FindE.Features.Empresa.Services.EmpresaService empresaService
 @inject NavigationManager navigationManager
 @inject IToastService toastService
 
-<h4 style="padding-bottom: 10px;">Cadastro de Vagas</h4>
+<h4 style="padding-bottom: 10px;">Cadastro de vagas</h4>
+
+@if (IdEmpresa == 0)
+{
+    <div class="form-group" style="width: 343px;">
+        <BlazoredTypeahead MinimumLength=2 MaximumSuggestions=5 SearchMethod="PesquisarEmpresa" Debounce="500"
+                       TValue="EmpresaModel" TItem="EmpresaModel"
+                       Value="EmpresaSelecionada" ValueChanged="SelecionarEmpresa"
+                       ValueExpression="@(() => EmpresaSelecionada)" placeholder="Pesquise pelo nome da empresa">
+            <SelectedTemplate>
+                @context.Nome
+            </SelectedTemplate>
+            <ResultTemplate>
+                @context.Nome
+            </ResultTemplate>
+            <NotFoundTemplate>
+                Nenhuma empresa encontrada.
+            </NotFoundTemplate>
+        </BlazoredTypeahead>
+    </div>
+}
+
+
 <EditForm Model="@Vaga" style="max-width: 350px;" class="row g-2" OnValidSubmit="GravarVaga">
     <div class="form-group">
+        <label for="NomeEmpresa">Nome da empresa:</label>
+        <input type="text" id="NomeEmpresa" class="form-control" readonly @bind="Vaga.Empresa.Nome">
+    </div>
+
+    <div class="form-group">
         <label for="DatadeAberturadaVaga">Data de abertura da vaga:</label>
-        <input type="text" id="DatadeAberturadaVaga" class="form-control" readonly @bind="Vaga.Empresa.Nome">
+        <input type="text" id="DatadeAberturadaVaga" class="form-control" readonly @bind="Vaga.DataDeAberturaDaVaga">
     </div>
     <div class="form-group">
         <label for="txtDescricao">Descrição:</label>
@@ -41,6 +70,8 @@
     [Parameter]
     public int IdVaga { get; set; }
     private VagaModel Vaga = new VagaModel();
+    private EmpresaModel EmpresaSelecionada { get; set; }
+    string filtroNomeEmpresa = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,7 +79,7 @@
 
         if (IdEmpresa > 0)
         {
-            Vaga.Empresa = await EmpresaService.RetornarEmpresa(IdEmpresa);
+            Vaga.Empresa = await empresaService.RetornarEmpresa(IdEmpresa);
         }
 
         if (IdVaga > 0)
@@ -56,7 +87,16 @@
             Vaga = await VagaService.RetornarVaga(IdVaga);
         }
     }
+     
+    private async Task<IEnumerable<EmpresaModel>> PesquisarEmpresa(string filtro)
+    {
+        return await empresaService.ListarEmpresa(filtro);
+    }
 
+    private void SelecionarEmpresa(EmpresaModel empresa)
+    {
+        Vaga.Empresa = empresa;
+    }
     private async Task GravarVaga()
     {
         try

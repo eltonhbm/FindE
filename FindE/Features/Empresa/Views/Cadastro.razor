@@ -51,12 +51,12 @@
             if (IdEmpresa > 0)
             {
                 await empresaService.AlterarEmpresa(Empresa);
-                toastService.ShowSuccess("Empresa alterado com sucesso.", "Tudo ok!");
+                toastService.ShowSuccess("Empresa alterada com sucesso.", "Tudo ok!");
             }
             else
             {
                 await empresaService.InserirEmpresa(Empresa);
-                toastService.ShowSuccess("Empresa inserido com sucesso.", "Tudo ok!");
+                toastService.ShowSuccess("Empresa inserida com sucesso.", "Tudo ok!");
             }
 
             navigationManager.NavigateTo("/ListagemEmpresa");
