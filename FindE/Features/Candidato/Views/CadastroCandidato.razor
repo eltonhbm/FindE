@@ -2,32 +2,39 @@
 @page "/CadastroCandidato/{IdEstagiario:int}/{IdCandidato:int}"
 @using FindE.Features.Candidato.Models
 @using FindE.Features.Estagiario.Models
+@using System.Linq
 @inject FindE.Features.Candidato.Services.CandidatoService candidatoService
 @inject FindE.Features.Estagiario.Services.EstagiarioService estagiarioService
 @inject NavigationManager navigationManager
 @inject IToastService toastService
 
 <h4 style="padding-bottom: 10px;">Cadastro do Candidato</h4>
-<EditForm Model="@Candidato" style="max-width: 350px;" class="row g-2" OnValidSubmit="GravarCandidato">
-    @if (IdEstagiario > 0)
-    {
-        <div class="form-group">
-            <label for="NomeEstagiario">Estagiário:</label>
-            <input type="text" id="NomeEstagiario" class="form-control" readonly @bind="Candidato.Estagiario.Nome">
-        </div>
 
-    }
-    else
-    {
-        <BlazoredTypeahead MinimumLength="2" MaximumSuggestions="5" SearchMethod="PesquisarEstagiario" Debounce="500"
-            TValue="EstagiarioModel" TItem="EstagiarioModel" Value="Estagiario" 
-            ValueChanged="SelecionarEstagiario">
-            <HelpTemplate>
-                Pesquise um estagiário.
-            </HelpTemplate>
-
+@if (IdEstagiario == 0)
+{
+    <div class="form-group" style="width: 400px;">
+        <BlazoredTypeahead MinimumLength=2 MaximumSuggestions=5 SearchMethod="PesquisarEstagiario" Debounce="500"
+                       TValue="EstagiarioModel" TItem="EstagiarioModel"
+                       Value="EstagiarioSelecionado" ValueChanged="SelecionarEstagiario"
+                       ValueExpression="@(() => EstagiarioSelecionado)">
+            <SelectedTemplate>
+                @context.Nome
+            </SelectedTemplate>
+            <ResultTemplate>
+                @context.Nome
+            </ResultTemplate>
+            <NotFoundTemplate>
+                Nenhum estagiário encontrado.
+            </NotFoundTemplate>
         </BlazoredTypeahead>
-    }
+    </div>
+}
+
+<EditForm Model="@Candidato" style="max-width: 350px;" class="row g-2" OnValidSubmit="GravarCandidato">
+    <div class="form-group">
+        <label for="NomeEstagiario">Estagiário:</label>
+        <input type="text" id="NomeEstagiario" class="form-control" readonly @bind="Candidato.Estagiario.Nome">
+    </div>
     <div class="form-group">
         <label for="txtDescricao">Minha Descrição:</label>
         <textarea type="text" id="txtDescricao" class="form-control" @bind="@Candidato.Descricao" required />
@@ -81,6 +88,7 @@
     [Parameter]
     public int IdCandidato { get; set; }
     private CandidatoModel Candidato = new CandidatoModel();
+    private EstagiarioModel EstagiarioSelecionado { get; set; }
     string filtroNomeEstagiario = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -100,12 +108,12 @@
 
     private async Task<IEnumerable<EstagiarioModel>> PesquisarEstagiario(string filtro)
     {
-        return await new List<EstagiarioModel>();
+        return await estagiarioService.ListarEstagiarios(filtro);
     }
 
     private void SelecionarEstagiario(EstagiarioModel estagiario)
     {
-
+        Candidato.Estagiario = estagiario;
     }
 
     private async Task GravarCandidato()

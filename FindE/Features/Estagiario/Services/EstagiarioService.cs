@@ -25,6 +25,20 @@ public class EstagiarioService
         }
     }
 
+    public async Task<List<EstagiarioModel>> ListarEstagiarios(string filtro)
+    {
+        try
+        {
+            var listagem = await dbContext.Estagiario.ToListAsync();
+
+            return listagem.Where(e => e.Nome.ToLower().Contains(filtro.ToLower())).ToList();
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
     public async Task<EstagiarioModel> InserirEstagiario(EstagiarioModel estagiario)
     {
         try
