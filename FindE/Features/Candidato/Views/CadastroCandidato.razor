@@ -12,11 +12,11 @@
 
 @if (IdEstagiario == 0)
 {
-    <div class="form-group" style="width: 400px;">
+    <div class="form-group" style="width: 343px;">
         <BlazoredTypeahead MinimumLength=2 MaximumSuggestions=5 SearchMethod="PesquisarEstagiario" Debounce="500"
                        TValue="EstagiarioModel" TItem="EstagiarioModel"
                        Value="EstagiarioSelecionado" ValueChanged="SelecionarEstagiario"
-                       ValueExpression="@(() => EstagiarioSelecionado)">
+                       ValueExpression="@(() => EstagiarioSelecionado)" placeholder="Pesquise pelo nome do estagiário">
             <SelectedTemplate>
                 @context.Nome
             </SelectedTemplate>
