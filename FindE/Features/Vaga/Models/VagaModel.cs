@@ -16,6 +16,9 @@ namespace FindE.Features.Vaga.Models
         [NotMapped]
         public string Mensagem { get; set; }
 
-
+        public VagaModel()
+        {
+            Empresa = new EmpresaModel();
+        }
     }
 }
