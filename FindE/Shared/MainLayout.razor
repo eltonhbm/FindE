@@ -8,60 +8,46 @@
                         ShowProgressBar="true"
                         Position="Blazored.Toast.Configuration.ToastPosition.BottomRight" />
 
-        <nav class="navbar navbar-expand-lg bg-light sticky-top shadow-sm">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="/">
-                    <img src="/logo_black.png" height="24" width="24">
-                    <span>FindE</span>
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link btn-outline-primary" href="ListagemEstagiario">Estagiários</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="ListagemEmpresa">Empresas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="ListagemDeEducadores">Educadores</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="ListagemDeContas">Contas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="sobre">Sobre</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav align-content-sm-end mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link">
-                                <i class="bi bi-search"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link">
-                                <i class="bi bi-bell"></i>
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="login" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-person"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">Meu perfil</a></li>
-                                <li><a class="dropdown-item" href="#">Configurações</a></li>
-                                <li><a class="dropdown-item" href="#">Sair</a></li>
+
+
+        <header id="header" class="d-flex align-items-center">
+            <div class="container d-flex align-items-center justify-content-between">
+
+                <h1 class="logo"><a href="index.html">FindE</a></h1>
+
+                <nav id="navbar" class="navbar">
+                    <ul>
+                        <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+                        <li><a class="nav-link scrollto" href="#about">Sobre nós</a></li>
+                        <li><a class="nav-link scrollto" href="#services">Candidatos</a></li>
+                        <li><a class="nav-link scrollto " href="#portfolio">Vagas</a></li>
+                        <li class="dropdown">
+                            <a href="#"><span>Empresas</span> <i class="bi bi-chevron-down"></i></a>
+                            <ul>
+                                <li><a href="CadastroEmpresa">Cadastrar empresa</a></li>
+                                <li><a href="ListagemEmpresa">Listar empresas</a></li>
                             </ul>
                         </li>
+                        <li class="dropdown">
+                            <a href=""><span>Estagiários</span> <i class="bi bi-chevron-down"></i></a>
+                            <ul>
+                                <li><a href="CadastroEstagiario">Cadastrar estagiário</a></li>
+                                <li><a href="ListagemEstagiario">Listar estagiários</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#"><span>Educadores</span> <i class="bi bi-chevron-down"></i></a>
+                            <ul>
+                                <li><a href="CadastroDeEducador">Cadastrar educador</a></li>
+                                <li><a href="ListagemDeEducadores">Listar educador</a></li>
+                            </ul>
+                        </li>
+                        <li><a class="nav-link scrollto" href="#contact">Contato</a></li>
                     </ul>
-                </div>
+                    <i class="bi bi-list mobile-nav-toggle"></i>
+                </nav>
             </div>
-        </nav>
+        </header>
 
         <article class="content px-4">
             @Body

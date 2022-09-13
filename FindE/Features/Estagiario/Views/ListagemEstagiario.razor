@@ -57,6 +57,9 @@
                                             <button type="button" class="btn btn-dark btn-sm" title="Adicionar candidato" @onclick="() => InserirCandidato(estagiario.Id)">
                                                 <div class="bi bi-person"></div>
                                             </button>
+                                            <button type="button" class="btn btn-dark btn-sm" title="Adicionar candidato" @onclick="() => InserirCandidato(estagiario.Id)">
+                                                <div class="bi bi-person-lines-fill"></div>
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -124,6 +127,11 @@
     private void InserirCandidato(int IdEstagiario)
     {
         navigationManager.NavigateTo($"/CadastroCandidato/{IdEstagiario}/0");
+    }
+
+    private void ListarCandidato(int IdEstagiario)
+    {
+        navigationManager.NavigateTo($"/ListarCandidato");
     }
 
     private async Task ApagarEstagiario(EstagiarioModel estagiario)
