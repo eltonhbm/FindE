@@ -25,7 +25,7 @@
                     <thead>
                         <tr>
                             <th>Id</th>
-                            <th>Empresa</th>
+                            <th>Nome</th>
                             <th>Data de Abertura da Vaga</th>
                             <th>Descrição</th>
                             <th>Hora Entrada</th>
@@ -63,7 +63,7 @@
                         }
                         else
                         {
-                            <tr><td colspan="9"><strong>Nenhuma Vaga cadastrada.</strong></td></tr>
+                            <tr><td colspan="8"><strong>Nenhuma Vaga cadastrada.</strong></td></tr>
                         }
                     </tbody>
                 </table>
@@ -110,7 +110,7 @@
 
     private void InserirVaga()
     {
-        navigationManager.NavigateTo("/CadastroVaga");
+        navigationManager.NavigateTo($"/CadastroVaga");
     }
 
     private void AlterarVaga(int IdVaga)

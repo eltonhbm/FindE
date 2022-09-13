@@ -4,11 +4,11 @@
 @using FindE.Features.Empresa.Models
 @using System.Linq
 @inject FindE.Features.Vaga.Services.VagaService VagaService
-@inject FindE.Features.Empresa.Services.EmpresaService empresaService
+@inject FindE.Features.Empresa.Services.EmpresaService EmpresaService
 @inject NavigationManager navigationManager
 @inject IToastService toastService
 
-<h4 style="padding-bottom: 10px;">Cadastro de vagas</h4>
+<h4 style="padding-bottom: 10px;">Cadastro de Vagas</h4>
 
 @if (IdEmpresa == 0)
 {
@@ -30,16 +30,10 @@
     </div>
 }
 
-
 <EditForm Model="@Vaga" style="max-width: 350px;" class="row g-2" OnValidSubmit="GravarVaga">
     <div class="form-group">
-        <label for="NomeEmpresa">Nome da empresa:</label>
-        <input type="text" id="NomeEmpresa" class="form-control" readonly @bind="Vaga.Empresa.Nome">
-    </div>
-
-    <div class="form-group">
         <label for="DatadeAberturadaVaga">Data de abertura da vaga:</label>
-        <input type="text" id="DatadeAberturadaVaga" class="form-control" readonly @bind="Vaga.DataDeAberturaDaVaga">
+        <input type="text" id="DatadeAberturadaVaga" class="form-control" readonly @bind="Vaga.Empresa.Nome">
     </div>
     <div class="form-group">
         <label for="txtDescricao">Descrição:</label>
@@ -79,7 +73,7 @@
 
         if (IdEmpresa > 0)
         {
-            Vaga.Empresa = await empresaService.RetornarEmpresa(IdEmpresa);
+            Vaga.Empresa = await EmpresaService.RetornarEmpresa(IdEmpresa);
         }
 
         if (IdVaga > 0)
@@ -87,16 +81,17 @@
             Vaga = await VagaService.RetornarVaga(IdVaga);
         }
     }
-     
+
     private async Task<IEnumerable<EmpresaModel>> PesquisarEmpresa(string filtro)
     {
-        return await empresaService.ListarEmpresa(filtro);
+        return await EmpresaService.ListarEmpresa(filtro);
     }
 
     private void SelecionarEmpresa(EmpresaModel empresa)
     {
         Vaga.Empresa = empresa;
     }
+
     private async Task GravarVaga()
     {
         try
