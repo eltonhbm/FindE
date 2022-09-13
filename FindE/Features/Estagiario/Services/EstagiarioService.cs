@@ -25,6 +25,7 @@ public class EstagiarioService
         }
     }
 
+
     public async Task<List<EstagiarioModel>> ListarEstagiarios(string filtro)
     {
         try

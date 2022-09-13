@@ -24,7 +24,6 @@ namespace FindE.Features.Empresa.Services
                 throw;
             }
         }
-
         public async Task<List<EmpresaModel>> ListarEmpresa(string filtro)
         {
             try
