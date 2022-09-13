@@ -28,19 +28,6 @@ namespace FindE.Features.Empresa.Services
         {
             try
             {
-                var listagem = await dbContext.Empresa.ToListAsync();
-                return listagem.Where(e => e.Nome.ToLower().Contains(filtro.ToLower())).ToList();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public async Task<List<EmpresaModel>> ListarEmpresa(string filtro)
-        {
-            try
-            {
                 return await dbContext.Empresa.Where(e => e.Nome.ToLower().Contains(filtro.ToLower())).ToListAsync();
             }
             catch (Exception)
